@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Objects;
 
 import io.realm.Realm;
+import io.realm.mongodb.App;
+import io.realm.mongodb.AppConfiguration;
 
 /**
  * 功能：主界面
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
      */
     private boolean destroyed = true;
 
+    String AppId = "android_project-ibyjncm";
+
     /**
      * activity 创建时
      *
@@ -63,9 +67,12 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Realm.init(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Realm.init(this);
+        App app = new App(new AppConfiguration.Builder(AppId).build());
+
 
         // 初始化蓝牙管理器，这里会申请蓝牙权限
         WitBluetoothManager.initInstance(this);
