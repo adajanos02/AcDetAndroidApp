@@ -25,6 +25,8 @@ import java.util.Objects;
 import io.realm.Realm;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
+import io.realm.mongodb.Credentials;
+import io.realm.mongodb.User;
 
 /**
  * 功能：主界面
@@ -72,6 +74,21 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
 
         Realm.init(this);
         App app = new App(new AppConfiguration.Builder(AppId).build());
+
+        Credentials credentials = Credentials.emailPassword("adamecz36@gmail.com", "123456");
+        app.loginAsync(credentials, new App.Callback<User>() {
+            @Override
+            public void onResult(App.Result<User> result) {
+                if (result.isSuccess()) {
+                    Log.v("User", "Logged in successfully");
+                }
+                else {
+                    Log.v("User", "Failed to login");
+                }
+            }
+        });
+
+
 
 
         // 初始化蓝牙管理器，这里会申请蓝牙权限
