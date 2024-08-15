@@ -2,9 +2,12 @@ package com.wit.example;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,8 +60,9 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
      * 控制自动刷新线程是否工作
      */
     private boolean destroyed = true;
-
-    String AppId = "android_project-ibyjncm";
+    private EditText email;
+    private EditText password;
+    static String AppId = "android_project-ibyjncm";
 
     /**
      * activity 创建时
@@ -66,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
      * @author huangyajun
      * @date 2022/6/29 8:43
      */
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -73,26 +79,15 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         setContentView(R.layout.activity_main);
 
         Realm.init(this);
-        App app = new App(new AppConfiguration.Builder(AppId).build());
-
-        Credentials credentials = Credentials.emailPassword("adamecz36@gmail.com", "123456");
-        app.loginAsync(credentials, new App.Callback<User>() {
-            @Override
-            public void onResult(App.Result<User> result) {
-                if (result.isSuccess()) {
-                    Log.v("User", "Logged in successfully");
-                }
-                else {
-                    Log.v("User", "Failed to login");
-                }
-            }
-        });
-
-
 
 
         // 初始化蓝牙管理器，这里会申请蓝牙权限
         WitBluetoothManager.initInstance(this);
+
+//        Button submitButton = findViewById(R.id.submitButton);
+//        submitButton.setOnClickListener((v) -> {
+//            Login(findViewById(R.id.email),findViewById(R.id.password));
+//        });
 
         // 开始搜索按钮
         Button startSearchButton = findViewById(R.id.startSearchButton);
@@ -142,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
      * @author huangyajun
      * @date 2022/6/29 13:59
      */
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -154,6 +151,23 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
      * @author huangyajun
      * @date 2022/6/29 10:04
      */
+
+    public void Login(EditText email, EditText password) {
+        App app = new App(new AppConfiguration.Builder(MainActivity.AppId).build());
+
+        Credentials credentials = Credentials.emailPassword(email.toString(), password.toString());
+        app.loginAsync(credentials, new App.Callback<io.realm.mongodb.User>() {
+            @Override
+            public void onResult(App.Result<io.realm.mongodb.User> result) {
+                if (result.isSuccess()) {
+                    Log.v("User", "Logged in successfully");
+                }
+                else {
+                    Log.v("User", "Failed to login");
+                }
+            }
+        });
+    }
     public void startDiscovery() {
 
         // 关闭所有设备
