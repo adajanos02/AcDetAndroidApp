@@ -2,9 +2,13 @@ package com.wit.example;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +29,8 @@ import java.util.Objects;
 import io.realm.Realm;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
+import io.realm.mongodb.Credentials;
+import io.realm.mongodb.User;
 
 /**
  * 功能：主界面
@@ -55,8 +61,9 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
      * 控制自动刷新线程是否工作
      */
     private boolean destroyed = true;
-
-    String AppId = "android_project-ibyjncm";
+    private EditText email;
+    private EditText password;
+    static String AppId = "android_project-ibyjncm";
 
     /**
      * activity 创建时
@@ -64,18 +71,73 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
      * @author huangyajun
      * @date 2022/6/29 8:43
      */
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.login);
 
         Realm.init(this);
-        App app = new App(new AppConfiguration.Builder(AppId).build());
+
+        Button submitButton = findViewById(R.id.login_btn);
+        submitButton.setOnClickListener((v) -> {
+            EditText text = (EditText)findViewById(R.id.username_input);
+            String username = text.getText().toString();
+            EditText text2 = (EditText)findViewById(R.id.password_input);
+            String password = text2.getText().toString();
+            Login(username,password);
+        });
 
 
-        // 初始化蓝牙管理器，这里会申请蓝牙权限
+    }
+
+    /**
+     * activity 销毁时
+     *
+     * @author huangyajun
+     * @date 2022/6/29 13:59
+     */
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
+
+    /**
+     * 开始搜索设备
+     *
+     * @author huangyajun
+     * @date 2022/6/29 10:04
+     */
+
+    public void Login(String email, String password) {
+
+        App app = new App(new AppConfiguration.Builder(MainActivity.AppId).build());
+
+        Credentials credentials = Credentials.emailPassword(email, password);
+        app.loginAsync(credentials, new App.Callback<io.realm.mongodb.User>() {
+            @Override
+            public void onResult(App.Result<io.realm.mongodb.User> result) {
+                if (result.isSuccess()) {
+                    Log.v("User", "Logged in successfully");
+                    SenzorRecord();
+                }
+                else {
+                    Log.v("User", "Failed to login");
+                }
+            }
+        });
+    }
+
+    public void SenzorRecord() {
+        setContentView(R.layout.activity_main);
+
         WitBluetoothManager.initInstance(this);
+
 
         // 开始搜索按钮
         Button startSearchButton = findViewById(R.id.startSearchButton);
@@ -118,25 +180,6 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         destroyed = false;
         thread.start();
     }
-
-    /**
-     * activity 销毁时
-     *
-     * @author huangyajun
-     * @date 2022/6/29 13:59
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
-
-    /**
-     * 开始搜索设备
-     *
-     * @author huangyajun
-     * @date 2022/6/29 10:04
-     */
     public void startDiscovery() {
 
         // 关闭所有设备

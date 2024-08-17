@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">wit-example-ble5</string>
+    <string name="app_name">Accident Detector App</string>
     <string name="devices_list">Devices list</string>
     <string name="search_devices">Search devices</string>
     <string name="start_search">Start search</string>
@@ -35,4 +35,10 @@
     <string name="End_field_calibration">End field calibration</string>
     <string name="Start_field_calibration">Start field calibration</string>
     <string name="read_reg_03">Read register 03</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="example_example_com" translatable="false">example@example.com</string>
+    <string name="password">Password</string>
+    <string name="passwords">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="accident_detector_app">Accident Detector App</string>
 </resources>
