@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background"
+    android:padding="16dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MenuActivity">
+
+    <Button
+        android:id="@+id/button_start_ride"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Ride"
+        android:layout_marginBottom="16dp"
+        />
+
+    <Button
+        android:id="@+id/button_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Contacts"
+        android:layout_below="@id/button_start_ride"
+        android:layout_marginBottom="16dp"
+        />
+
+    <Button
+        android:id="@+id/button_find_me"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Find Me"
+        android:layout_below="@id/button_contacts"
+        android:layout_marginBottom="16dp"
+       />
+
+    <Button
+        android:id="@+id/button_sos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SOS"
+        android:layout_below="@id/button_find_me" />
+
+</RelativeLayout>

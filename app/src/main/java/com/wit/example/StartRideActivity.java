@@ -1,16 +1,13 @@
 package com.wit.example;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
 import com.wit.witsdk.modular.sensor.example.ble5.Bwt901ble;
@@ -27,114 +24,23 @@ import java.util.List;
 import java.util.Objects;
 
 import io.realm.Realm;
-import io.realm.mongodb.App;
-import io.realm.mongodb.AppConfiguration;
-import io.realm.mongodb.Credentials;
-import io.realm.mongodb.User;
 
-/**
- * 功能：主界面
- * 说明：
- * 1. 本程序是维特智能开发的蓝牙5.0sdk使用示例
- * 2. 本程序适用于维特智能以下产品
- * BWT901BLECL5.0
- * BWT901BLE5.0
- * WT901BLE5.0
- * 3. 本程序只有一个页面，没有其它页面
- *
- * @author huangyajun
- * @date 2022/6/29 11:35
- */
-public class MainActivity extends AppCompatActivity implements IBluetoothFoundObserver, IBwt901bleRecordObserver {
+public class StartRideActivity extends AppCompatActivity implements IBluetoothFoundObserver, IBwt901bleRecordObserver {
 
-    /**
-     * 日志标签
-     */
+
     private static final String TAG = "MainActivity";
-
-    /**
-     * 设备列表
-     */
     private List<Bwt901ble> bwt901bleList = new ArrayList<>();
 
-    /**
-     * 控制自动刷新线程是否工作
-     */
     private boolean destroyed = true;
-    private EditText email;
-    private EditText password;
-    static String AppId = "android_project-ibyjncm";
-
-    /**
-     * activity 创建时
-     *
-     * @author huangyajun
-     * @date 2022/6/29 8:43
-     */
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_main);
 
         Realm.init(this);
-
-        Button submitButton = findViewById(R.id.login_btn);
-        submitButton.setOnClickListener((v) -> {
-            EditText text = (EditText)findViewById(R.id.username_input);
-            String username = text.getText().toString();
-            EditText text2 = (EditText)findViewById(R.id.password_input);
-            String password = text2.getText().toString();
-            Login(username,password);
-        });
-
-
-    }
-
-    /**
-     * activity 销毁时
-     *
-     * @author huangyajun
-     * @date 2022/6/29 13:59
-     */
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
-
-    /**
-     * 开始搜索设备
-     *
-     * @author huangyajun
-     * @date 2022/6/29 10:04
-     */
-
-    public void Login(String email, String password) {
-
-        App app = new App(new AppConfiguration.Builder(MainActivity.AppId).build());
-
-        Credentials credentials = Credentials.emailPassword(email, password);
-        app.loginAsync(credentials, new App.Callback<io.realm.mongodb.User>() {
-            @Override
-            public void onResult(App.Result<io.realm.mongodb.User> result) {
-                if (result.isSuccess()) {
-                    Log.v("User", "Logged in successfully");
-                    SenzorRecord();
-                }
-                else {
-                    Log.v("User", "Failed to login");
-                }
-            }
-        });
-    }
-
-    public void SenzorRecord() {
-        setContentView(R.layout.activity_main);
 
         WitBluetoothManager.initInstance(this);
 
@@ -179,7 +85,14 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         Thread thread = new Thread(this::refreshDataTh);
         destroyed = false;
         thread.start();
+
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
+
     public void startDiscovery() {
 
         // 关闭所有设备
@@ -205,12 +118,6 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         }
     }
 
-    /**
-     * 停止搜索设备
-     *
-     * @author huangyajun
-     * @date 2022/6/29 10:04
-     */
     public void stopDiscovery() {
         // 停止搜索蓝牙
         try {
@@ -225,12 +132,6 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         }
     }
 
-    /**
-     * 当搜到蓝牙5.0设备时会回调这个方法
-     *
-     * @author huangyajun
-     * @date 2022/6/29 8:46
-     */
     @Override
     public void onFoundBle(BluetoothBLE bluetoothBLE) {
         // 创建蓝牙5.0传感器连接对象
@@ -258,35 +159,17 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         }
     }
 
-    /**
-     * 当搜索到蓝牙2.0设备时会回调这个方法
-     *
-     * @author huangyajun
-     * @date 2022/6/29 10:01
-     */
     @Override
     public void onFoundSPP(BluetoothSPP bluetoothSPP) {
         // 不做任何处理，这个示例程序只演示如何连接蓝牙5.0设备
     }
 
-    /**
-     * 当需要记录数据时会回调这个方法
-     *
-     * @author huangyajun
-     * @date 2022/6/29 8:46
-     */
     @Override
     public void onRecord(Bwt901ble bwt901ble) {
         String deviceData = getDeviceData(bwt901ble);
         Log.d(TAG, "device data [ " + bwt901ble.getDeviceName() + "] = " + deviceData);
     }
 
-    /**
-     * 自动刷新数据线程
-     *
-     * @author huangyajun
-     * @date 2022/6/29 13:41
-     */
     private void refreshDataTh() {
 
         while (!destroyed) {
@@ -311,12 +194,6 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         }
     }
 
-    /**
-     * 获得一个设备的数据
-     *
-     * @author huangyajun
-     * @date 2022/6/29 11:37
-     */
     private String getDeviceData(Bwt901ble bwt901ble) {
         StringBuilder builder = new StringBuilder();
         builder.append(bwt901ble.getDeviceName()).append("\n");
@@ -338,12 +215,6 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         return builder.toString();
     }
 
-    /**
-     * 让所有设备加计校准
-     *
-     * @author huangyajun
-     * @date 2022/6/29 10:25
-     */
     private void handleAppliedCalibration() {
         for (int i = 0; i < bwt901bleList.size(); i++) {
             Bwt901ble bwt901ble = bwt901bleList.get(i);
@@ -355,12 +226,6 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         Toast.makeText(this, "OK", Toast.LENGTH_LONG).show();
     }
 
-    /**
-     * 让所有设备开始磁场校准
-     *
-     * @author huangyajun
-     * @date 2022/6/29 10:25
-     */
     private void handleStartFieldCalibration() {
         for (int i = 0; i < bwt901bleList.size(); i++) {
             Bwt901ble bwt901ble = bwt901bleList.get(i);
@@ -372,12 +237,6 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         Toast.makeText(this, "OK", Toast.LENGTH_LONG).show();
     }
 
-    /**
-     * 让所有设备结束磁场校准
-     *
-     * @author huangyajun
-     * @date 2022/6/29 10:25
-     */
     private void handleEndFieldCalibration() {
         for (int i = 0; i < bwt901bleList.size(); i++) {
             Bwt901ble bwt901ble = bwt901bleList.get(i);
@@ -389,12 +248,6 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
         Toast.makeText(this, "OK", Toast.LENGTH_LONG).show();
     }
 
-    /**
-     * 读取03寄存器的数据
-     *
-     * @author huangyajun
-     * @date 2022/6/29 10:25
-     */
     private void handleReadReg03() {
         for (int i = 0; i < bwt901bleList.size(); i++) {
             Bwt901ble bwt901ble = bwt901bleList.get(i);
@@ -408,4 +261,6 @@ public class MainActivity extends AppCompatActivity implements IBluetoothFoundOb
             Toast.makeText(this, bwt901ble.getDeviceName() + " reg03Value: " + reg03Value, Toast.LENGTH_LONG).show();
         }
     }
+
+
 }
