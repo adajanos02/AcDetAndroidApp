@@ -8,7 +8,7 @@
     android:padding="16dp"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".MenuActivity">
+    tools:context=".activities.MenuActivity">
 
     <Button
         android:id="@+id/button_start_ride"
