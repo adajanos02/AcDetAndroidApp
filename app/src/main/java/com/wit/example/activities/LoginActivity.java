@@ -29,6 +29,8 @@ public class LoginActivity extends AppCompatActivity{
     public static MongoDatabase mongoDatabase;
     public static MongoClient mongoClient;
 
+    public static App app;
+
 
 
 
@@ -55,7 +57,7 @@ public class LoginActivity extends AppCompatActivity{
 
     public void Login(String email, String password) {
 
-        App app = new App(new AppConfiguration.Builder(LoginActivity.AppId).build());
+        app = new App(new AppConfiguration.Builder(LoginActivity.AppId).build());
 
         Credentials credentials = Credentials.emailPassword(email, password);
         app.loginAsync(credentials, new App.Callback<io.realm.mongodb.User>() {
