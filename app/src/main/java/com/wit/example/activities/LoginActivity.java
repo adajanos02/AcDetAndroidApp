@@ -44,12 +44,19 @@ public class LoginActivity extends AppCompatActivity{
         Realm.init(this);
 
         Button submitButton = findViewById(R.id.login_btn);
+        Button registerButton = findViewById(R.id.signup_btn);
+
         submitButton.setOnClickListener((v) -> {
             EditText text = (EditText)findViewById(R.id.username_input);
             String username = text.getText().toString();
             EditText text2 = (EditText)findViewById(R.id.password_input);
             String password = text2.getText().toString();
             Login(username,password);
+        });
+
+        registerButton.setOnClickListener((v) -> {
+            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+            startActivity(intent);
         });
 
 

@@ -59,6 +59,16 @@
             android:layout_marginTop="32dp"
             android:textSize="20sp"
             android:id="@+id/login_btn"/>
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            android:backgroundTint="@color/white"
+            android:textColor="#3B84F1"
+            android:padding="18dp"
+            android:layout_marginTop="32dp"
+            android:textSize="20sp"
+            android:id="@+id/signup_btn"/>
 
 
 

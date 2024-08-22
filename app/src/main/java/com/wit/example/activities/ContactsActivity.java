@@ -71,6 +71,7 @@ public class ContactsActivity extends AppCompatActivity {
                 Document document = new Document()
                         .append("phone", insertData.getText().toString())
                         .append("userId", LoginActivity.user.getId());
+
                 mongoCollection.insertOne(document).getAsync(result -> {
                     if (result.isSuccess()) {
                         Log.v("Data", "Data inserted successfully");

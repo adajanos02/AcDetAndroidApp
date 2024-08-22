@@ -13,15 +13,17 @@
     <Button
         android:id="@+id/button_start_ride"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:text="Start Ride"
+        android:textSize="30dp"
         android:layout_marginBottom="16dp"
         />
 
     <Button
         android:id="@+id/button_contacts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
+        android:textSize="30dp"
         android:text="Contacts"
         android:layout_below="@id/button_start_ride"
         android:layout_marginBottom="16dp"
@@ -30,8 +32,9 @@
     <Button
         android:id="@+id/button_find_me"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:text="Find Me"
+        android:textSize="30dp"
         android:layout_below="@id/button_contacts"
         android:layout_marginBottom="16dp"
        />
@@ -39,7 +42,8 @@
     <Button
         android:id="@+id/button_sos"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
+        android:textSize="30dp"
         android:text="SOS"
         android:layout_below="@id/button_find_me" />
 
