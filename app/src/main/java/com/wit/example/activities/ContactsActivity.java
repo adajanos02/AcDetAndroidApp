@@ -1,6 +1,5 @@
 package com.wit.example.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,26 +7,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.wit.example.R;
 
-import org.bson.BsonDocument;
 import org.bson.Document;
 
-import java.lang.annotation.Documented;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.mongodb.RealmResultTask;
-import io.realm.mongodb.mongo.MongoClient;
 import io.realm.mongodb.mongo.MongoCollection;
-import io.realm.mongodb.mongo.MongoDatabase;
 import io.realm.mongodb.mongo.iterable.MongoCursor;
 
 public class ContactsActivity extends AppCompatActivity {
@@ -36,7 +28,7 @@ public class ContactsActivity extends AppCompatActivity {
     private Button insertBtn;
 
     private MongoCollection<Document> mongoCollection;
-    private ArrayList<String> phone;
+    private ArrayList<String> phoneList;
     private ArrayAdapter<String> adapter;
     private ListView list;
 
@@ -52,20 +44,20 @@ public class ContactsActivity extends AppCompatActivity {
 
         LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
         LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
-        mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
+        mongoCollection = LoginActivity.mongoDatabase.getCollection("Contacts");
 
         list = findViewById(R.id.contact_list);
-        phone = new ArrayList<>();
+        phoneList = new ArrayList<>();
 
         adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
-                phone
+                phoneList
         );
         getContactList();
 
 
-        insertData = (EditText) findViewById(R.id.data);
+        insertData = findViewById(R.id.phone_number);
         insertBtn = (Button) findViewById(R.id.upload_btn);
         Realm.init(getApplicationContext());
 
@@ -76,7 +68,9 @@ public class ContactsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Document document = new Document().append("phone", insertData.getText().toString()).append("myid", "1234").append("userId", LoginActivity.user.getId());
+                Document document = new Document()
+                        .append("phone", insertData.getText().toString())
+                        .append("userId", LoginActivity.user.getId());
                 mongoCollection.insertOne(document).getAsync(result -> {
                     if (result.isSuccess()) {
                         Log.v("Data", "Data inserted successfully");
@@ -93,10 +87,10 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     public void getContactList() {
-        phone.clear();
+        phoneList.clear();
         LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
         LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
-        mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
+        mongoCollection = LoginActivity.mongoDatabase.getCollection("Contacts");
         LoginActivity.user = LoginActivity.app.currentUser();
 
 
@@ -104,17 +98,13 @@ public class ContactsActivity extends AppCompatActivity {
 
         RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryFilter).iterator();
 
-        final String[] data = new String[1];
-        data[0] = "";
         findTask.getAsync(task -> {
             if (task.isSuccess()) {
                 MongoCursor<Document> results = task.get();
                 while (results.hasNext()){
                     Document currentDoc = results.next();
                     if (currentDoc.getString("phone")!= null) {
-                        phone.add(currentDoc.getString("phone"));
-                        data[0] = data[0] + "\n" + (currentDoc.getString("phone"));
-                        //list.setText(data[0]);
+                        phoneList.add(currentDoc.getString("phone"));
                     }
                     list.setAdapter(adapter);
                 }
