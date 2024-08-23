@@ -1,14 +1,29 @@
 package com.wit.example.activities;
 
+import static com.mongodb.client.model.Filters.eq;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.wit.example.R;
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
 import com.wit.witsdk.modular.sensor.example.ble5.Bwt901ble;
@@ -20,17 +35,27 @@ import com.wit.witsdk.modular.sensor.modular.connector.modular.bluetooth.excepti
 import com.wit.witsdk.modular.sensor.modular.connector.modular.bluetooth.interfaces.IBluetoothFoundObserver;
 import com.wit.witsdk.modular.sensor.modular.processor.constant.WitSensorKey;
 
+import org.bson.Document;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import io.realm.Realm;
+import io.realm.mongodb.App;
+import io.realm.mongodb.mongo.MongoCollection;
 
 public class StartRideActivity extends AppCompatActivity implements IBluetoothFoundObserver, IBwt901bleRecordObserver {
 
-
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
+    private LocationRequest locationRequest;
     private static final String TAG = "MainActivity";
     private List<Bwt901ble> bwt901bleList = new ArrayList<>();
+
+    private MongoCollection<Document> mongoCollection;
 
     private boolean destroyed = true;
 
@@ -40,8 +65,9 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        Realm.init(this);
+        startLocationUpdates();
 
         WitBluetoothManager.initInstance(this);
 
@@ -263,5 +289,79 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         }
     }
 
+    private void startLocationUpdates() {
+        locationRequest = LocationRequest.create();
+        locationRequest.setInterval(20000); // 20 másodperc
+        locationRequest.setFastestInterval(20000); // 20 másodperc
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+
+                for (Location location : locationResult.getLocations()) {
+                    // Hely koordináták lekérése
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    String address = getAddressFromCoordinates(latitude, longitude);
+                    if (address != null) {
+                        pushLocationToDb(address);
+                        Toast.makeText(StartRideActivity.this, "Address: " + address, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
+            return;
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+
+    private String getAddressFromCoordinates(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                return address.getAddressLine(0); // Teljes cím
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void pushLocationToDb(String location) {
+        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
+        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
+        mongoCollection = LoginActivity.mongoDatabase.getCollection("Contacts");
+
+        LoginActivity.user = LoginActivity.app.currentUser();
+
+
+        Document query = new Document().append("userId", LoginActivity.user);
+        Document update = new Document().append("$set",
+                new Document()
+                        .append("location", location));
+
+//        final Task<RemoteUpdateResult> updateTask =
+//                newsFeedCollection.updateOne(filter, update);
+//        updateTask.addOnCompleteListener(new OnCompleteListener <RemoteUpdateResult> () {
+//            @Override
+//            public void onComplete(@NonNull Task <RemoteUpdateResult> task) {
+//                if (task.isSuccessful()) {
+//                    ("app", String.format("Updated!"));
+//                } else {
+//                    Log.e("app", "failed to update document with: ", task.getException());
+//                }
+//            }
+//        });
+
+
+
+        mongoCollection.updateOne(eq("userId", LoginActivity.user.getId()), update);
+    }
 
 }
