@@ -35,6 +35,10 @@ public class LoginActivity extends AppCompatActivity{
 
 
     @Override
+    public void onBackPressed() {
+
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -67,6 +71,7 @@ public class LoginActivity extends AppCompatActivity{
         app = new App(new AppConfiguration.Builder(LoginActivity.AppId).build());
 
         Credentials credentials = Credentials.emailPassword(email, password);
+
         app.loginAsync(credentials, new App.Callback<io.realm.mongodb.User>() {
             @Override
             public void onResult(App.Result<io.realm.mongodb.User> result) {

@@ -6,45 +6,60 @@
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
     android:padding="16dp"
-    android:gravity="center"
-    android:orientation="vertical"
     tools:context=".activities.MenuActivity">
 
-    <Button
-        android:id="@+id/button_start_ride"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="Start Ride"
-        android:textSize="30dp"
-        android:layout_marginBottom="16dp"
-        />
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_above="@id/logout_btn">
+
+        <Button
+            android:id="@+id/button_start_ride"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Start Ride"
+            android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/button_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_start_ride"
+            android:layout_marginBottom="16dp"
+            android:text="Contacts"
+            android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/button_find_me"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_contacts"
+            android:layout_marginBottom="16dp"
+            android:text="Find Me"
+            android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/button_sos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_find_me"
+            android:text="SOS"
+            android:textSize="30dp" />
+
+    </RelativeLayout>
 
     <Button
-        android:id="@+id/button_contacts"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:textSize="30dp"
-        android:text="Contacts"
-        android:layout_below="@id/button_start_ride"
+        android:id="@+id/logout_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
-        />
-
-    <Button
-        android:id="@+id/button_find_me"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="Find Me"
+        android:layout_alignParentRight="true"
+        android:text="Log out"
         android:textSize="30dp"
-        android:layout_below="@id/button_contacts"
-        android:layout_marginBottom="16dp"
-       />
-
-    <Button
-        android:id="@+id/button_sos"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:textSize="30dp"
-        android:text="SOS"
-        android:layout_below="@id/button_find_me" />
+        android:gravity="center"/>
 
 </RelativeLayout>

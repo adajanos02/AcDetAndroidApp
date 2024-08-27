@@ -83,6 +83,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         Button stopSearchButton = findViewById(R.id.stopSearchButton);
         stopSearchButton.setOnClickListener((v) -> {
             stopDiscovery();
+            stopLocationUpdates();
         });
 
         // 加计校准按钮
@@ -362,6 +363,12 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
 
         }
+
+    private void stopLocationUpdates() {
+        if (fusedLocationClient != null && locationCallback != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
+    }
 
 
 }
