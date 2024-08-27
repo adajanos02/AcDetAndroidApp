@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +23,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.mongodb.client.MongoCursor;
 import com.wit.example.R;
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
 import com.wit.witsdk.modular.sensor.example.ble5.Bwt901ble;
@@ -43,9 +43,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import io.realm.Realm;
-import io.realm.mongodb.App;
+import io.realm.mongodb.RealmResultTask;
 import io.realm.mongodb.mongo.MongoCollection;
+import io.realm.mongodb.mongo.result.UpdateResult;
+
 
 public class StartRideActivity extends AppCompatActivity implements IBluetoothFoundObserver, IBwt901bleRecordObserver {
 
@@ -305,8 +306,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                     double longitude = location.getLongitude();
                     String address = getAddressFromCoordinates(latitude, longitude);
                     if (address != null) {
-                        pushLocationToDb(address);
-                        Toast.makeText(StartRideActivity.this, "Address: " + address, Toast.LENGTH_LONG).show();
+                        updateLocation(address);
+                        //Toast.makeText(StartRideActivity.this, "Address: " + address, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -333,35 +334,34 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         return null;
     }
 
-    private void pushLocationToDb(String location) {
+    private void updateLocation(String location) {
         LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
         LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
-        mongoCollection = LoginActivity.mongoDatabase.getCollection("Contacts");
+        mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
 
-        LoginActivity.user = LoginActivity.app.currentUser();
+        //LoginActivity.user = LoginActivity.app.currentUser();
 
 
-        Document query = new Document().append("userId", LoginActivity.user);
+        Document query = new Document().append("userId", LoginActivity.user.getId());
         Document update = new Document().append("$set",
-                new Document()
-                        .append("location", location));
-
-//        final Task<RemoteUpdateResult> updateTask =
-//                newsFeedCollection.updateOne(filter, update);
-//        updateTask.addOnCompleteListener(new OnCompleteListener <RemoteUpdateResult> () {
-//            @Override
-//            public void onComplete(@NonNull Task <RemoteUpdateResult> task) {
-//                if (task.isSuccessful()) {
-//                    ("app", String.format("Updated!"));
-//                } else {
-//                    Log.e("app", "failed to update document with: ", task.getException());
-//                }
-//            }
-//        });
+                new Document().append("location", location));
+        Log.v("userId", LoginActivity.user.getId());
 
 
+        mongoCollection.updateOne(query, update).getAsync(result -> {
+            if (result.isSuccess())
+            {
+                Log.v("UpdateFunction","Updated Data");
 
-        mongoCollection.updateOne(eq("userId", LoginActivity.user.getId()), update);
-    }
+            }
+            else
+            {
+                Log.v("UpdateFunction","Error"+result.getError().toString());
+            }
+        });
+
+
+        }
+
 
 }
