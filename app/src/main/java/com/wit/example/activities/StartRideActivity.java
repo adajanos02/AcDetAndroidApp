@@ -1,8 +1,9 @@
 package com.wit.example.activities;
 
-import static com.mongodb.client.model.Filters.eq;
+
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -23,8 +24,8 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.mongodb.client.MongoCursor;
 import com.wit.example.R;
+import com.wit.example.helpers.LocationUtil;
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
 import com.wit.witsdk.modular.sensor.example.ble5.Bwt901ble;
 import com.wit.witsdk.modular.sensor.example.ble5.interfaces.IBwt901bleRecordObserver;
@@ -45,10 +46,10 @@ import java.util.Objects;
 
 import io.realm.mongodb.RealmResultTask;
 import io.realm.mongodb.mongo.MongoCollection;
-import io.realm.mongodb.mongo.result.UpdateResult;
+import io.realm.mongodb.mongo.iterable.MongoCursor;
 
 
-public class StartRideActivity extends AppCompatActivity implements IBluetoothFoundObserver, IBwt901bleRecordObserver {
+public class StartRideActivity extends AppCompatActivity implements IBluetoothFoundObserver, IBwt901bleRecordObserver, LocationUtil.LocationCallbackListener {
 
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -68,7 +69,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         setContentView(R.layout.activity_main);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        startLocationUpdates();
+        //startLocationUpdates();
 
         WitBluetoothManager.initInstance(this);
 
@@ -76,7 +77,11 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         // 开始搜索按钮
         Button startSearchButton = findViewById(R.id.startSearchButton);
         startSearchButton.setOnClickListener((v) -> {
-            startDiscovery();
+            //startDiscovery();
+            //stopLocationUpdates();
+            //userAlert("37.4219983$-122.084");
+            //SmsHelper.sendSms("06309502820", "Szia");
+            sosAlert();
         });
 
         // 停止搜索按钮
@@ -305,7 +310,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                     // Hely koordináták lekérése
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
-                    String address = getAddressFromCoordinates(latitude, longitude);
+                    String address = String.valueOf(latitude) + "$" + String.valueOf(longitude);
                     if (address != null) {
                         updateLocation(address);
                         //Toast.makeText(StartRideActivity.this, "Address: " + address, Toast.LENGTH_LONG).show();
@@ -370,5 +375,82 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         }
     }
 
+    public void sosAlert() {
+        stopLocationUpdates();
+        LocationUtil locationUtil = new LocationUtil(LocationServices.getFusedLocationProviderClient(this));
+        locationUtil.getCurrentLocation(this);
+    }
 
+    private void userAlert(String location){
+
+        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
+        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
+        mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
+
+        String[] locationArray = location.split("$");
+        double latitude;
+        //latitude = Double.parseDouble(locationArray[0]);
+        //double longitude = Double.parseDouble(locationArray[1]);
+
+
+        RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find().iterator();
+
+        findTask.getAsync(task -> {
+            if (task.isSuccess()) {
+                MongoCursor<Document> results = task.get();
+                while (results.hasNext()){
+                    Document currentDoc = results.next();
+                    if (currentDoc.getString("location")!= null) {
+                        String[] resultLocationArr = currentDoc.getString("location").split("$");
+//                        float distance = calculateDistance(
+//                                latitude,
+//                                latitude,
+//                                latitude,
+//                                latitude);
+
+                        Toast.makeText(getApplicationContext(), "valami", Toast.LENGTH_LONG).show();
+                        if (true) {
+                            //SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: ");
+                        }
+                    }
+
+                }
+
+
+            }
+            else{
+                Log.v("Task error",task.getError().toString());
+            }
+        });
+    }
+
+    public static float calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        // Létrehozzuk az első Location objektumot
+        Location location1 = new Location("pointA");
+        location1.setLatitude(lat1);
+        location1.setLongitude(lon1);
+
+        // Létrehozzuk a második Location objektumot
+        Location location2 = new Location("pointB");
+        location2.setLatitude(lat2);
+        location2.setLongitude(lon2);
+
+        // Kiszámoljuk a távolságot a két pont között
+        return location1.distanceTo(location2);
+    }
+
+
+    @Override
+    public void onLocationReceived(String location) {
+        if (location != null) {
+            String loc = "37.4219983$-122.084";
+              userAlert(loc);
+            Toast.makeText(getApplicationContext(), location, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public Activity getContext() {
+        return this;
+    }
 }
