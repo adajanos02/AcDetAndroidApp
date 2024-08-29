@@ -40,17 +40,19 @@ public class LocationUtil {
                             String locationString = latitude + "$" + longitude;
 
                             // Visszatérés a helyszínnel
-                            listener.onLocationReceived(locationString);
+                            listener.onLocationReceived(latitude, longitude);
                         } else {
                             // Ha nincs elérhető helyzet
-                            listener.onLocationReceived(null);
+                            listener.onLocationReceived(0,0);
                         }
                     }
                 });
     }
 
     public interface LocationCallbackListener {
-        void onLocationReceived(String location);
+
+        void onLocationReceived(double latitude, double longitude);
+
         Activity getContext();
     }
 }

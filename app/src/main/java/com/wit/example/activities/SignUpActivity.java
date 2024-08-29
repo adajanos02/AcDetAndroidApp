@@ -94,7 +94,8 @@ public class SignUpActivity extends AppCompatActivity {
                 .append("email", email)
                 .append("password", password)
                 .append("phone", phoneNumber)
-                .append("location", "")
+                .append("latitude", "")
+                .append("longitude", "")
                 .append("userId", LoginActivity.user.getId());
         mongoCollection.insertOne(document).getAsync(result -> {
             if (result.isSuccess()) {

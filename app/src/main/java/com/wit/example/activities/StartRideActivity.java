@@ -26,6 +26,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.wit.example.R;
 import com.wit.example.helpers.LocationUtil;
+import com.wit.example.helpers.SmsHelper;
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
 import com.wit.witsdk.modular.sensor.example.ble5.Bwt901ble;
 import com.wit.witsdk.modular.sensor.example.ble5.interfaces.IBwt901bleRecordObserver;
@@ -49,7 +50,7 @@ import io.realm.mongodb.mongo.MongoCollection;
 import io.realm.mongodb.mongo.iterable.MongoCursor;
 
 
-public class StartRideActivity extends AppCompatActivity implements IBluetoothFoundObserver, IBwt901bleRecordObserver, LocationUtil.LocationCallbackListener {
+public class StartRideActivity extends AppCompatActivity implements IBluetoothFoundObserver, IBwt901bleRecordObserver {
 
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -69,7 +70,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         setContentView(R.layout.activity_main);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        //startLocationUpdates();
+        startLocationUpdates();
 
         WitBluetoothManager.initInstance(this);
 
@@ -312,8 +313,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                     double longitude = location.getLongitude();
                     String address = String.valueOf(latitude) + "$" + String.valueOf(longitude);
                     if (address != null) {
-                        updateLocation(address);
-                        //Toast.makeText(StartRideActivity.this, "Address: " + address, Toast.LENGTH_LONG).show();
+                        updateLocation(latitude, longitude);
+                        Toast.makeText(StartRideActivity.this, "Address: " + address, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -340,7 +341,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         return null;
     }
 
-    private void updateLocation(String location) {
+    private void updateLocation(double latitude, double longitude) {
         LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
         LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
         mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
@@ -350,7 +351,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
         Document query = new Document().append("userId", LoginActivity.user.getId());
         Document update = new Document().append("$set",
-                new Document().append("location", location));
+                new Document().append("latitude", latitude)
+                        .append("longitude", longitude));
         Log.v("userId", LoginActivity.user.getId());
 
 
@@ -376,41 +378,70 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     }
 
     public void sosAlert() {
-        stopLocationUpdates();
-        LocationUtil locationUtil = new LocationUtil(LocationServices.getFusedLocationProviderClient(this));
-        locationUtil.getCurrentLocation(this);
+        //stopLocationUpdates();
+//        LocationUtil locationUtil = new LocationUtil(LocationServices.getFusedLocationProviderClient(this));
+//        locationUtil.getCurrentLocation(this);
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        Toast.makeText(getApplicationContext(), "Szia", Toast.LENGTH_LONG).show();
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+
+                for (Location location : locationResult.getLocations()) {
+                    // Hely koordináták lekérése
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    String address = String.valueOf(latitude) + "$" + String.valueOf(longitude);
+                    Toast.makeText(getApplicationContext(), String.valueOf(latitude), Toast.LENGTH_LONG).show();
+                    if (address != null) {
+                        userAlert(latitude, longitude);
+                        sendSmsToContacts(getAddressFromCoordinates(latitude, longitude));
+                        Toast.makeText(StartRideActivity.this, "Address: " + address, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        };
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
+            return;
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+
     }
 
-    private void userAlert(String location){
+    private void userAlert(double latitude, double longitude){
 
         LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
         LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
         mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
 
-        String[] locationArray = location.split("$");
-        double latitude;
-        //latitude = Double.parseDouble(locationArray[0]);
-        //double longitude = Double.parseDouble(locationArray[1]);
-
 
         RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find().iterator();
+        LoginActivity.user = LoginActivity.app.currentUser();
 
         findTask.getAsync(task -> {
             if (task.isSuccess()) {
                 MongoCursor<Document> results = task.get();
                 while (results.hasNext()){
                     Document currentDoc = results.next();
-                    if (currentDoc.getString("location")!= null) {
-                        String[] resultLocationArr = currentDoc.getString("location").split("$");
-//                        float distance = calculateDistance(
-//                                latitude,
-//                                latitude,
-//                                latitude,
-//                                latitude);
+                    if (!Objects.equals(currentDoc.getString("userId"), LoginActivity.user.getId())) {
+                        if (currentDoc.getDouble("latitude")!= null) {
+                            double resultLat = currentDoc.getDouble("latitude");
+                            double resultLong = currentDoc.getDouble("longitude");
+                            float distance = calculateDistance(
+                                    latitude,
+                                    longitude,
+                                    resultLat,
+                                    resultLong);
 
-                        Toast.makeText(getApplicationContext(), "valami", Toast.LENGTH_LONG).show();
-                        if (true) {
-                            //SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: ");
+                            Toast.makeText(getApplicationContext(), String.valueOf(distance), Toast.LENGTH_LONG).show();
+                            Log.v("Data", String.valueOf(distance));
+                            if (true) {
+                                SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: ");
+                                Toast.makeText(getApplicationContext(), "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
 
@@ -440,17 +471,41 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     }
 
 
-    @Override
-    public void onLocationReceived(String location) {
-        if (location != null) {
-            String loc = "37.4219983$-122.084";
-              userAlert(loc);
-            Toast.makeText(getApplicationContext(), location, Toast.LENGTH_LONG).show();
-        }
-    }
 
-    @Override
-    public Activity getContext() {
-        return this;
+//    @Override
+//    public void onLocationReceived(double latitude, double longitude) {
+//        if (latitude != 0) {
+//            userAlert(latitude, longitude);
+//            sendSmsToContacts(getAddressFromCoordinates(latitude, longitude));
+//            Toast.makeText(getApplicationContext(), String.valueOf(latitude), Toast.LENGTH_LONG).show();
+//        }
+//    }
+
+
+    public void sendSmsToContacts(String location) {
+        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
+        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
+        mongoCollection = LoginActivity.mongoDatabase.getCollection("Contacts");
+
+        Document queryFilter = new Document().append("userId",LoginActivity.user.getId());
+
+        RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryFilter).iterator();
+
+        findTask.getAsync(task -> {
+            if (task.isSuccess()) {
+                MongoCursor<Document> results = task.get();
+                while (results.hasNext()){
+                    Document currentDoc = results.next();
+                    if (currentDoc.getString("phone")!= null) {
+                        SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: " + location);
+                        Toast.makeText(getApplicationContext(), "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }
+            else{
+                Log.v("Task error",task.getError().toString());
+            }
+        });
     }
 }
