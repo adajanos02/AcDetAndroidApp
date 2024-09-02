@@ -3,7 +3,6 @@ package com.wit.example.activities;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -25,7 +24,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.wit.example.R;
-import com.wit.example.helpers.LocationUtil;
 import com.wit.example.helpers.SmsHelper;
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
 import com.wit.witsdk.modular.sensor.example.ble5.Bwt901ble;
@@ -56,7 +54,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
     private static final String TAG = "MainActivity";
-    private List<Bwt901ble> bwt901bleList = new ArrayList<>();
+    private final List<Bwt901ble> bwt901bleList = new ArrayList<>();
 
     private MongoCollection<Document> mongoCollection;
 
@@ -397,6 +395,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                     Toast.makeText(getApplicationContext(), String.valueOf(latitude), Toast.LENGTH_LONG).show();
                     if (address != null) {
                         userAlert(latitude, longitude);
+
                         sendSmsToContacts(getAddressFromCoordinates(latitude, longitude));
                         Toast.makeText(StartRideActivity.this, "Address: " + address, Toast.LENGTH_LONG).show();
                     }
@@ -496,8 +495,10 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                 MongoCursor<Document> results = task.get();
                 while (results.hasNext()){
                     Document currentDoc = results.next();
+                    String accident = "Baleset történt ezen a címen: " + location;
+                    Log.v("Adress", accident);
                     if (currentDoc.getString("phone")!= null) {
-                        SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: " + location);
+                        SmsHelper.sendSms(currentDoc.getString("phone"), accident);
                         Toast.makeText(getApplicationContext(), "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
                     }
 
