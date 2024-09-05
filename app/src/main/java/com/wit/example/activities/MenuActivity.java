@@ -2,6 +2,7 @@ package com.wit.example.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,7 @@ public class MenuActivity extends AppCompatActivity {
         startRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(MenuActivity.this, StartRideActivity.class);
                 startActivity(intent);
             }

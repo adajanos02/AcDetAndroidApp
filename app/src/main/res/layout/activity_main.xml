@@ -7,6 +7,8 @@
     android:id="@+id/myConstraintLayout"
     tools:context=".activities.StartRideActivity">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,7 +16,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:text="Start Ride"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="27dp"
+            android:id="@+id/startRideBtn"
+            android:layout_marginBottom="20dp" >
 
+        </Button>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,6 +139,7 @@
                 android:text=""
                 android:textColor="@color/white" />
         </LinearLayout>
+
 
     </LinearLayout>
 

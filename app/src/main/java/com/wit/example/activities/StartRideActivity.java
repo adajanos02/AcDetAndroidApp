@@ -1,13 +1,15 @@
 package com.wit.example.activities;
 
 
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
@@ -24,6 +26,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.wit.example.R;
+import com.wit.example.helpers.Countdown;
 import com.wit.example.helpers.SmsHelper;
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
 import com.wit.witsdk.modular.sensor.example.ble5.Bwt901ble;
@@ -54,7 +57,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
     private static final String TAG = "MainActivity";
-    private final List<Bwt901ble> bwt901bleList = new ArrayList<>();
+    private List<Bwt901ble> bwt901bleList = new ArrayList<>();
 
     private MongoCollection<Document> mongoCollection;
 
@@ -68,19 +71,23 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         setContentView(R.layout.activity_main);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        startLocationUpdates();
+        //startLocationUpdates();
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         WitBluetoothManager.initInstance(this);
 
+        Button startRideButton = findViewById(R.id.startRideBtn);
+        startRideButton.setOnClickListener((v) -> {
+            startSensorMonitoring(bwt901bleList.get(0));
+            Log.v("SENZOR", bwt901bleList.get(0).toString());
+        });
 
         // 开始搜索按钮
         Button startSearchButton = findViewById(R.id.startSearchButton);
         startSearchButton.setOnClickListener((v) -> {
-            //startDiscovery();
-            //stopLocationUpdates();
-            //userAlert("37.4219983$-122.084");
-            //SmsHelper.sendSms("06309502820", "Szia");
-            sosAlert();
+            startDiscovery();
+
         });
 
         // 停止搜索按钮
@@ -120,6 +127,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         thread.start();
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -229,22 +237,37 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     private String getDeviceData(Bwt901ble bwt901ble) {
         StringBuilder builder = new StringBuilder();
+        if (bwt901ble.getDeviceData(WitSensorKey.AngleX) != null) {
+            if (Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) > 30 && !timerActive) {
+                startTimer(bwt901ble);
+                stopLocationUpdates();
+            }
+
+            if (Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) < 30 && timerActive){
+                if (!thread.isInterrupted()) {
+                    thread.interrupt();
+                    timer.seconds = 10;
+                    timerActive = false;
+                }
+            }
+
+        }
         builder.append(bwt901ble.getDeviceName()).append("\n");
-        builder.append(getString(R.string.accX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AccX)).append("g \t");
-        builder.append(getString(R.string.accY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AccY)).append("g \t");
-        builder.append(getString(R.string.accZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AccZ)).append("g \n");
-        builder.append(getString(R.string.asX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsX)).append("°/s \t");
-        builder.append(getString(R.string.asY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsY)).append("°/s \t");
-        builder.append(getString(R.string.asZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsZ)).append("°/s \n");
-        builder.append(getString(R.string.angleX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleX)).append("° \t");
-        builder.append(getString(R.string.angleY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleY)).append("° \t");
+//        builder.append(getString(R.string.accX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AccX)).append("g \t");
+//        builder.append(getString(R.string.accY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AccY)).append("g \t");
+//        builder.append(getString(R.string.accZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AccZ)).append("g \n");
+//        builder.append(getString(R.string.asX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsX)).append("°/s \t");
+//        builder.append(getString(R.string.asY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsY)).append("°/s \t");
+//        builder.append(getString(R.string.asZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsZ)).append("°/s \n");
+        builder.append(getString(R.string.angleX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleX)).append("° \n");
+        builder.append(getString(R.string.angleY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleY)).append("° \n");
         builder.append(getString(R.string.angleZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleZ)).append("° \n");
-        builder.append(getString(R.string.hX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HX)).append("\t");
-        builder.append(getString(R.string.hY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HY)).append("\t");
-        builder.append(getString(R.string.hZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HZ)).append("\n");
-        builder.append(getString(R.string.t)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.T)).append("\n");
-        builder.append(getString(R.string.electricQuantityPercentage)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.ElectricQuantityPercentage)).append("\n");
-        builder.append(getString(R.string.versionNumber)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.VersionNumber)).append("\n");
+//        builder.append(getString(R.string.hX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HX)).append("\t");
+//        builder.append(getString(R.string.hY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HY)).append("\t");
+//        builder.append(getString(R.string.hZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HZ)).append("\n");
+//        builder.append(getString(R.string.t)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.T)).append("\n");
+//        builder.append(getString(R.string.electricQuantityPercentage)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.ElectricQuantityPercentage)).append("\n");
+//        builder.append(getString(R.string.versionNumber)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.VersionNumber)).append("\n");
         return builder.toString();
     }
 
@@ -312,7 +335,6 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                     String address = String.valueOf(latitude) + "$" + String.valueOf(longitude);
                     if (address != null) {
                         updateLocation(latitude, longitude);
-                        Toast.makeText(StartRideActivity.this, "Address: " + address, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -355,19 +377,16 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
 
         mongoCollection.updateOne(query, update).getAsync(result -> {
-            if (result.isSuccess())
-            {
-                Log.v("UpdateFunction","Updated Data");
+            if (result.isSuccess()) {
+                Log.v("UpdateFunction", "Updated Data");
 
-            }
-            else
-            {
-                Log.v("UpdateFunction","Error"+result.getError().toString());
+            } else {
+                Log.v("UpdateFunction", "Error" + result.getError().toString());
             }
         });
 
 
-        }
+    }
 
     private void stopLocationUpdates() {
         if (fusedLocationClient != null && locationCallback != null) {
@@ -382,7 +401,6 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        Toast.makeText(getApplicationContext(), "Szia", Toast.LENGTH_LONG).show();
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
@@ -392,12 +410,9 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
                     String address = String.valueOf(latitude) + "$" + String.valueOf(longitude);
-                    Toast.makeText(getApplicationContext(), String.valueOf(latitude), Toast.LENGTH_LONG).show();
                     if (address != null) {
                         userAlert(latitude, longitude);
-
                         sendSmsToContacts(getAddressFromCoordinates(latitude, longitude));
-                        Toast.makeText(StartRideActivity.this, "Address: " + address, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -410,7 +425,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     }
 
-    private void userAlert(double latitude, double longitude){
+    private void userAlert(double latitude, double longitude) {
 
         LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
         LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
@@ -423,10 +438,10 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         findTask.getAsync(task -> {
             if (task.isSuccess()) {
                 MongoCursor<Document> results = task.get();
-                while (results.hasNext()){
+                while (results.hasNext()) {
                     Document currentDoc = results.next();
                     if (!Objects.equals(currentDoc.getString("userId"), LoginActivity.user.getId())) {
-                        if (currentDoc.getDouble("latitude")!= null) {
+                        if (currentDoc.getDouble("latitude") != null) {
                             double resultLat = currentDoc.getDouble("latitude");
                             double resultLong = currentDoc.getDouble("longitude");
                             float distance = calculateDistance(
@@ -435,10 +450,9 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                                     resultLat,
                                     resultLong);
 
-                            Toast.makeText(getApplicationContext(), String.valueOf(distance), Toast.LENGTH_LONG).show();
                             Log.v("Data", String.valueOf(distance));
                             if (true) {
-                                SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: ");
+                                SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: " + getAddressFromCoordinates(latitude, longitude));
                                 Toast.makeText(getApplicationContext(), "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
                             }
                         }
@@ -447,38 +461,24 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                 }
 
 
-            }
-            else{
-                Log.v("Task error",task.getError().toString());
+            } else {
+                Log.v("Task error", task.getError().toString());
             }
         });
     }
 
     public static float calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        // Létrehozzuk az első Location objektumot
+
         Location location1 = new Location("pointA");
         location1.setLatitude(lat1);
         location1.setLongitude(lon1);
 
-        // Létrehozzuk a második Location objektumot
         Location location2 = new Location("pointB");
         location2.setLatitude(lat2);
         location2.setLongitude(lon2);
 
-        // Kiszámoljuk a távolságot a két pont között
         return location1.distanceTo(location2);
     }
-
-
-
-//    @Override
-//    public void onLocationReceived(double latitude, double longitude) {
-//        if (latitude != 0) {
-//            userAlert(latitude, longitude);
-//            sendSmsToContacts(getAddressFromCoordinates(latitude, longitude));
-//            Toast.makeText(getApplicationContext(), String.valueOf(latitude), Toast.LENGTH_LONG).show();
-//        }
-//    }
 
 
     public void sendSmsToContacts(String location) {
@@ -486,27 +486,121 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
         mongoCollection = LoginActivity.mongoDatabase.getCollection("Contacts");
 
-        Document queryFilter = new Document().append("userId",LoginActivity.user.getId());
+        Document queryFilter = new Document().append("userId", LoginActivity.user.getId());
 
         RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryFilter).iterator();
 
         findTask.getAsync(task -> {
             if (task.isSuccess()) {
                 MongoCursor<Document> results = task.get();
-                while (results.hasNext()){
+                while (results.hasNext()) {
                     Document currentDoc = results.next();
                     String accident = "Baleset történt ezen a címen: " + location;
                     Log.v("Adress", accident);
-                    if (currentDoc.getString("phone")!= null) {
+                    if (currentDoc.getString("phone") != null) {
                         SmsHelper.sendSms(currentDoc.getString("phone"), accident);
                         Toast.makeText(getApplicationContext(), "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
                     }
 
                 }
-            }
-            else{
-                Log.v("Task error",task.getError().toString());
+            } else {
+                Log.v("Task error", task.getError().toString());
             }
         });
     }
+
+
+    private boolean timerActive = false;
+    private boolean speedMeasurementActive = false;
+
+    private LocationManager locationManager;
+    private Location lastLocation;
+    private long lastTime;
+    private double accelerationThreshold = 6.6;
+    Countdown timer = new Countdown(10);
+    Thread thread;
+
+    private boolean accelerationFlag = false;
+
+    private void startSensorMonitoring(Bwt901ble bwt901ble) {
+        // Figyeld a szenzort itt, például egy időzítővel vagy szenzor listenerrel.
+        // Az egyszerűség kedvéért feltételezzük, hogy a sensorValue folyamatosan frissül.
+
+        if (Integer.parseInt(bwt901ble.getDeviceData(WitSensorKey.AngleX)) > 30 && !timerActive) {
+            startTimer(bwt901ble);
+            stopLocationUpdates();
+        }
+    }
+    private void startTimer(Bwt901ble bwt901ble) {
+        timerActive = true;
+
+
+        // 10 másodperces számláló
+        thread = new Thread(timer);
+        thread.start();
+
+    }
+
+    private void startSpeedMeasurement() {
+        speedMeasurementActive = true;
+
+        // Helyzetváltozás figyelése
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
+            return;
+        }
+
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                if (lastLocation != null) {
+                    long timeDiff = System.currentTimeMillis() - lastTime;
+                    float speed = location.getSpeed();
+                    double acceleration = (speed - lastLocation.getSpeed()) / (timeDiff / 1000.0);
+
+                    if (acceleration > accelerationThreshold) {
+                        accelerationFlag = true;
+                        Toast.makeText(StartRideActivity.this, "Acceleration threshold exceeded!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                lastLocation = location;
+                lastTime = System.currentTimeMillis();
+            }
+
+
+        });
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Győződj meg arról, hogy leállítod a helymeghatározást, ha nincs szükség rá.
+        if (locationManager != null) {
+            locationManager.removeUpdates(locationListener);
+        }
+    }
+
+    private final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            // Helyzetváltozás kezelése itt
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        @Override
+        public void onProviderEnabled(@NonNull String provider) {
+        }
+
+        @Override
+        public void onProviderDisabled(@NonNull String provider) {
+        }
+    };
 }
+
