@@ -2,9 +2,16 @@ package com.wit.example.helpers;
 
 import android.util.Log;
 
+import com.wit.example.activities.StartRideActivity;
+
 public class Countdown implements Runnable{
 
     public int seconds;
+    StartRideActivity sra;
+    public Countdown(int seconds, StartRideActivity sra) {
+        this.seconds = seconds;
+        this.sra = sra;
+    }
 
     public Countdown(int seconds) {
         this.seconds = seconds;
@@ -21,6 +28,10 @@ public class Countdown implements Runnable{
                 return;
             }
         }
-        Log.v("COUNTDOWN", "DONE!");
+        Log.v("COUNTDOWN", "ALERT SEND!");
+        if (!StartRideActivity.accelerationFlag) {
+            sra.sosAlert();
+            sra.destroyed = true;
+        }
     }
 }

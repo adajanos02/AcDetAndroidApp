@@ -27,6 +27,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.wit.example.R;
 import com.wit.example.helpers.Countdown;
+import com.wit.example.helpers.OnEventListener;
 import com.wit.example.helpers.SmsHelper;
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
 import com.wit.witsdk.modular.sensor.example.ble5.Bwt901ble;
@@ -61,7 +62,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     private MongoCollection<Document> mongoCollection;
 
-    private boolean destroyed = true;
+    public boolean destroyed = true;
 
 
     @Override
@@ -71,7 +72,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         setContentView(R.layout.activity_main);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        //startLocationUpdates();
+        startLocationUpdates();
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -79,7 +80,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
         Button startRideButton = findViewById(R.id.startRideBtn);
         startRideButton.setOnClickListener((v) -> {
-            startSensorMonitoring(bwt901bleList.get(0));
+            //startSensorMonitoring(bwt901bleList.get(0));
             Log.v("SENZOR", bwt901bleList.get(0).toString());
         });
 
@@ -95,6 +96,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         stopSearchButton.setOnClickListener((v) -> {
             stopDiscovery();
             stopLocationUpdates();
+            destroyed = true;
         });
 
         // 加计校准按钮
@@ -235,39 +237,45 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         }
     }
 
+    private boolean inFallAngelInterval(double xplus, double xminus, double currentAngelX){
+        if (currentAngelX >= xminus && currentAngelX <= xplus) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+
     private String getDeviceData(Bwt901ble bwt901ble) {
+
+
         StringBuilder builder = new StringBuilder();
         if (bwt901ble.getDeviceData(WitSensorKey.AngleX) != null) {
-            if (Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) > 30 && !timerActive) {
+            if (firstAngelData) {
+                angleThreshold1 = Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) + 70;
+                angleThreshold2 = Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) - 70;
+                firstAngelData = false;
+            }
+            if (inFallAngelInterval(angleThreshold1, angleThreshold2,Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", "."))) && !timerActive) {
                 startTimer(bwt901ble);
                 stopLocationUpdates();
             }
 
-            if (Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) < 30 && timerActive){
+            if (!inFallAngelInterval(angleThreshold1, angleThreshold2,Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", "."))) && timerActive){
                 if (!thread.isInterrupted()) {
                     thread.interrupt();
                     timer.seconds = 10;
+                    startLocationUpdates();
                     timerActive = false;
                 }
             }
 
         }
         builder.append(bwt901ble.getDeviceName()).append("\n");
-//        builder.append(getString(R.string.accX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AccX)).append("g \t");
-//        builder.append(getString(R.string.accY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AccY)).append("g \t");
-//        builder.append(getString(R.string.accZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AccZ)).append("g \n");
-//        builder.append(getString(R.string.asX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsX)).append("°/s \t");
-//        builder.append(getString(R.string.asY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsY)).append("°/s \t");
-//        builder.append(getString(R.string.asZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsZ)).append("°/s \n");
         builder.append(getString(R.string.angleX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleX)).append("° \n");
         builder.append(getString(R.string.angleY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleY)).append("° \n");
         builder.append(getString(R.string.angleZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleZ)).append("° \n");
-//        builder.append(getString(R.string.hX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HX)).append("\t");
-//        builder.append(getString(R.string.hY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HY)).append("\t");
-//        builder.append(getString(R.string.hZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HZ)).append("\n");
-//        builder.append(getString(R.string.t)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.T)).append("\n");
-//        builder.append(getString(R.string.electricQuantityPercentage)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.ElectricQuantityPercentage)).append("\n");
-//        builder.append(getString(R.string.versionNumber)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.VersionNumber)).append("\n");
         return builder.toString();
     }
 
@@ -394,11 +402,12 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         }
     }
 
+
     public void sosAlert() {
+
         //stopLocationUpdates();
 //        LocationUtil locationUtil = new LocationUtil(LocationServices.getFusedLocationProviderClient(this));
 //        locationUtil.getCurrentLocation(this);
-
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationCallback = new LocationCallback() {
@@ -450,8 +459,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                                     resultLat,
                                     resultLong);
 
-                            Log.v("Data", String.valueOf(distance));
-                            if (true) {
+                            Log.v("DISTANCE", String.valueOf(distance));
+                            if (distance < 5000) {
                                 SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: " + getAddressFromCoordinates(latitude, longitude));
                                 Toast.makeText(getApplicationContext(), "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
                             }
@@ -517,10 +526,15 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     private Location lastLocation;
     private long lastTime;
     private double accelerationThreshold = 6.6;
-    Countdown timer = new Countdown(10);
+    Countdown timer = new Countdown(10, this);
+
+    private boolean firstAngelData = true;
+
+    private double angleThreshold1 = 0;
+    private double angleThreshold2 = 0;
     Thread thread;
 
-    private boolean accelerationFlag = false;
+    public static boolean accelerationFlag = false;
 
     private void startSensorMonitoring(Bwt901ble bwt901ble) {
         // Figyeld a szenzort itt, például egy időzítővel vagy szenzor listenerrel.
