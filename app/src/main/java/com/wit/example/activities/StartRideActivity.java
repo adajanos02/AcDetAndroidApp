@@ -27,6 +27,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.wit.example.R;
 import com.wit.example.helpers.Countdown;
+import com.wit.example.helpers.DistanceCalculator;
 import com.wit.example.helpers.OnEventListener;
 import com.wit.example.helpers.SmsHelper;
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
@@ -453,14 +454,12 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                         if (currentDoc.getDouble("latitude") != null) {
                             double resultLat = currentDoc.getDouble("latitude");
                             double resultLong = currentDoc.getDouble("longitude");
-                            float distance = calculateDistance(
-                                    latitude,
-                                    longitude,
-                                    resultLat,
-                                    resultLong);
+                            DistanceCalculator disCal = new DistanceCalculator();
+
+                            double distance = disCal.greatCircleInKilometers(latitude, longitude, resultLat, resultLong);
 
                             Log.v("DISTANCE", String.valueOf(distance));
-                            if (distance < 5000) {
+                            if (distance < 30) {
                                 SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: " + getAddressFromCoordinates(latitude, longitude));
                                 Toast.makeText(getApplicationContext(), "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
                             }
@@ -477,6 +476,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     }
 
     public static float calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+
+
 
         Location location1 = new Location("pointA");
         location1.setLatitude(lat1);
