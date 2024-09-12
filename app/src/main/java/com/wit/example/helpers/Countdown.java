@@ -29,7 +29,7 @@ public class Countdown implements Runnable{
             }
         }
         Log.v("COUNTDOWN", "ALERT SEND!");
-        if (!StartRideActivity.accelerationFlag) {
+        if (StartRideActivity.accelerationFlag) {
             sra.sosAlert();
             sra.destroyed = true;
         }

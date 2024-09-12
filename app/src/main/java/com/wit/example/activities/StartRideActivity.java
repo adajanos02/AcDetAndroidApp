@@ -28,7 +28,6 @@ import com.google.android.gms.location.LocationServices;
 import com.wit.example.R;
 import com.wit.example.helpers.Countdown;
 import com.wit.example.helpers.DistanceCalculator;
-import com.wit.example.helpers.OnEventListener;
 import com.wit.example.helpers.SmsHelper;
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
 import com.wit.witsdk.modular.sensor.example.ble5.Bwt901ble;
@@ -238,18 +237,17 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         }
     }
 
-    private boolean inFallAngelInterval(double xplus, double xminus, double currentAngelX){
+    private boolean inFallAngelInterval(double xplus, double xminus, double currentAngelX) {
         if (currentAngelX >= xminus && currentAngelX <= xplus) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
 
 
     private String getDeviceData(Bwt901ble bwt901ble) {
-
+        double min = 0.0;
 
         StringBuilder builder = new StringBuilder();
         if (bwt901ble.getDeviceData(WitSensorKey.AngleX) != null) {
@@ -258,12 +256,12 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                 angleThreshold2 = Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) - 70;
                 firstAngelData = false;
             }
-            if (inFallAngelInterval(angleThreshold1, angleThreshold2,Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", "."))) && !timerActive) {
+            if (inFallAngelInterval(angleThreshold1, angleThreshold2, Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", "."))) && !timerActive) {
                 startTimer(bwt901ble);
                 stopLocationUpdates();
             }
 
-            if (!inFallAngelInterval(angleThreshold1, angleThreshold2,Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", "."))) && timerActive){
+            if (!inFallAngelInterval(angleThreshold1, angleThreshold2, Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", "."))) && timerActive) {
                 if (!thread.isInterrupted()) {
                     thread.interrupt();
                     timer.seconds = 10;
@@ -274,9 +272,28 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
         }
         builder.append(bwt901ble.getDeviceName()).append("\n");
-        builder.append(getString(R.string.angleX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleX)).append("° \n");
-        builder.append(getString(R.string.angleY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleY)).append("° \n");
+        if (!Objects.equals(bwt901ble.getDeviceData(WitSensorKey.AccX), null) &&
+                !Objects.equals(bwt901ble.getDeviceData(WitSensorKey.AccY), null) &&
+                !Objects.equals(bwt901ble.getDeviceData(WitSensorKey.AccZ), null)){
+            if (accelerationThreshold > Math.round(Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AccY).replaceAll(",", ".")) * 9.81 * 100.0) / 100.0 && timerActive ) {
+                accelerationFlag = true;
+            }
+            //builder.append(getString(R.string.accX)).append(":").append(Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AccX).replaceAll(",", ".")) * 9.81).append("g \t");
+            builder.append(getString(R.string.accY)).append(":").append(Math.round(Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AccY).replaceAll(",", ".")) * 9.81 * 100.0) / 100.0).append("m/s \t");
+            //builder.append(getString(R.string.accZ)).append(":").append(Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AccZ).replaceAll(",", ".")) * 9.81).append("g \n");
+
+        }
+        builder.append(getString(R.string.asX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsX)).append("°/s \t");
+        builder.append(getString(R.string.asY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsY)).append("°/s \t");
+        builder.append(getString(R.string.asZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsZ)).append("°/s \n");
+        builder.append(getString(R.string.angleX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleX)).append("° \t");
+        builder.append(getString(R.string.angleY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleY)).append("° \t");
         builder.append(getString(R.string.angleZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleZ)).append("° \n");
+        builder.append(getString(R.string.hX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HX)).append("\t");
+        builder.append(getString(R.string.hY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HY)).append("\t");
+        builder.append(getString(R.string.hZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HZ)).append("\n");
+        builder.append(getString(R.string.t)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.T)).append("\n");
+        builder.append(String.valueOf(min)).append(" m/s2");
         return builder.toString();
     }
 
@@ -341,8 +358,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                     // Hely koordináták lekérése
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
-                    String address = String.valueOf(latitude) + "$" + String.valueOf(longitude);
-                    if (address != null) {
+                    if (latitude != 0 && longitude != 0) {
                         updateLocation(latitude, longitude);
                     }
                 }
@@ -432,8 +448,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
             return;
         }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-
     }
+
 
     private void userAlert(double latitude, double longitude) {
 
@@ -526,7 +542,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     private LocationManager locationManager;
     private Location lastLocation;
     private long lastTime;
-    private double accelerationThreshold = 6.6;
+    private double accelerationThreshold = -6.6;
     Countdown timer = new Countdown(10, this);
 
     private boolean firstAngelData = true;
