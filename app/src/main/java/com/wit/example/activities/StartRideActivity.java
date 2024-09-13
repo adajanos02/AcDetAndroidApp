@@ -2,6 +2,7 @@ package com.wit.example.activities;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -63,6 +64,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     private MongoCollection<Document> mongoCollection;
 
     public boolean destroyed = true;
+    public boolean accidentHappend = false;
 
 
     @Override
@@ -78,11 +80,6 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
         WitBluetoothManager.initInstance(this);
 
-        Button startRideButton = findViewById(R.id.startRideBtn);
-        startRideButton.setOnClickListener((v) -> {
-            //startSensorMonitoring(bwt901bleList.get(0));
-            Log.v("SENZOR", bwt901bleList.get(0).toString());
-        });
 
         // 开始搜索按钮
         Button startSearchButton = findViewById(R.id.startSearchButton);
@@ -99,29 +96,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
             destroyed = true;
         });
 
-        // 加计校准按钮
-        Button appliedCalibrationButton = findViewById(R.id.appliedCalibrationButton);
-        appliedCalibrationButton.setOnClickListener((v) -> {
-            handleAppliedCalibration();
-        });
 
-        // 开始磁场校准按钮
-        Button startFieldCalibrationButton = findViewById(R.id.startFieldCalibrationButton);
-        startFieldCalibrationButton.setOnClickListener((v) -> {
-            handleStartFieldCalibration();
-        });
-
-        // 结束磁场校准按钮
-        Button endFieldCalibrationButton = findViewById(R.id.endFieldCalibrationButton);
-        endFieldCalibrationButton.setOnClickListener((v) -> {
-            handleEndFieldCalibration();
-        });
-
-        // 读取03寄存器按钮
-        Button readReg03Button = findViewById(R.id.readReg03Button);
-        readReg03Button.setOnClickListener((v) -> {
-            handleReadReg03();
-        });
 
         // 自动刷新数据线程
         Thread thread = new Thread(this::refreshDataTh);
@@ -248,6 +223,11 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     private String getDeviceData(Bwt901ble bwt901ble) {
         double min = 0.0;
+        if (accidentHappend) {
+            Intent intent = new Intent(StartRideActivity.this, AreYouOkayCheckActivity.class);
+            startActivity(intent);
+
+        }
 
         StringBuilder builder = new StringBuilder();
         if (bwt901ble.getDeviceData(WitSensorKey.AngleX) != null) {
@@ -257,7 +237,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                 firstAngelData = false;
             }
             if (inFallAngelInterval(angleThreshold1, angleThreshold2, Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", "."))) && !timerActive) {
-                startTimer(bwt901ble);
+                startTimer();
                 stopLocationUpdates();
             }
 
@@ -271,7 +251,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
             }
 
         }
-        builder.append(bwt901ble.getDeviceName()).append("\n");
+        builder.append(bwt901ble.getDeviceName()).append("\n\n");
         if (!Objects.equals(bwt901ble.getDeviceData(WitSensorKey.AccX), null) &&
                 !Objects.equals(bwt901ble.getDeviceData(WitSensorKey.AccY), null) &&
                 !Objects.equals(bwt901ble.getDeviceData(WitSensorKey.AccZ), null)){
@@ -279,21 +259,16 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                 accelerationFlag = true;
             }
             //builder.append(getString(R.string.accX)).append(":").append(Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AccX).replaceAll(",", ".")) * 9.81).append("g \t");
-            builder.append(getString(R.string.accY)).append(":").append(Math.round(Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AccY).replaceAll(",", ".")) * 9.81 * 100.0) / 100.0).append("m/s \t");
+            builder.append(getString(R.string.accY)).append(":").append(Math.round(Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AccY).replaceAll(",", ".")) * 9.81 * 100.0) / 100.0).append(" m/s2 \n\n");
             //builder.append(getString(R.string.accZ)).append(":").append(Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AccZ).replaceAll(",", ".")) * 9.81).append("g \n");
 
         }
-        builder.append(getString(R.string.asX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsX)).append("°/s \t");
-        builder.append(getString(R.string.asY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsY)).append("°/s \t");
-        builder.append(getString(R.string.asZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AsZ)).append("°/s \n");
-        builder.append(getString(R.string.angleX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleX)).append("° \t");
-        builder.append(getString(R.string.angleY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleY)).append("° \t");
-        builder.append(getString(R.string.angleZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleZ)).append("° \n");
-        builder.append(getString(R.string.hX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HX)).append("\t");
-        builder.append(getString(R.string.hY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HY)).append("\t");
-        builder.append(getString(R.string.hZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.HZ)).append("\n");
-        builder.append(getString(R.string.t)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.T)).append("\n");
+        builder.append(getString(R.string.angleX)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleX)).append("° \n\n");
+        builder.append(getString(R.string.angleY)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleY)).append("° \n\n");
+        builder.append(getString(R.string.angleZ)).append(":").append(bwt901ble.getDeviceData(WitSensorKey.AngleZ)).append("° \n\n");
         builder.append(String.valueOf(min)).append(" m/s2");
+
+        builder.append(accelerationFlag);
         return builder.toString();
     }
 
@@ -422,9 +397,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     public void sosAlert() {
 
-        //stopLocationUpdates();
-//        LocationUtil locationUtil = new LocationUtil(LocationServices.getFusedLocationProviderClient(this));
-//        locationUtil.getCurrentLocation(this);
+
+
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationCallback = new LocationCallback() {
@@ -448,6 +422,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
             return;
         }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+        Intent intent = new Intent(StartRideActivity.this, SosAlertActivity.class);
+        startActivity(intent);
     }
 
 
@@ -549,7 +525,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     private double angleThreshold1 = 0;
     private double angleThreshold2 = 0;
-    Thread thread;
+    public static Thread thread;
 
     public static boolean accelerationFlag = false;
 
@@ -558,11 +534,11 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         // Az egyszerűség kedvéért feltételezzük, hogy a sensorValue folyamatosan frissül.
 
         if (Integer.parseInt(bwt901ble.getDeviceData(WitSensorKey.AngleX)) > 30 && !timerActive) {
-            startTimer(bwt901ble);
+            startTimer();
             stopLocationUpdates();
         }
     }
-    private void startTimer(Bwt901ble bwt901ble) {
+    private void startTimer() {
         timerActive = true;
 
 

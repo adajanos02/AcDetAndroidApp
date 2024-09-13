@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/myConstraintLayout"
+    android:background="@drawable/login_background"
     tools:context=".activities.StartRideActivity">
 
 
@@ -16,17 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <Button
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:text="Start Ride"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textSize="27dp"
-            android:id="@+id/startRideBtn"
-            android:layout_marginBottom="20dp" >
 
-        </Button>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,6 +27,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textSize="20sp"
                 android:text="@string/search_devices" />
         </LinearLayout>
 
@@ -46,18 +39,23 @@
 
             <Button
                 android:id="@+id/startSearchButton"
+                android:textSize="18dp"
+                android:layout_margin="10dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_weight="1"
                 android:text="@string/start_search" />
 
             <Button
                 android:id="@+id/stopSearchButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textSize="18sp"
+                android:layout_height="70dp"
                 android:layout_weight="1"
                 android:text="@string/stop_search" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,63 +64,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/control_devices" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/appliedCalibrationButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/applied_calibration" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <Button
-                    android:id="@+id/startFieldCalibrationButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/Start_field_calibration" />
-                <Button
-                android:id="@+id/endFieldCalibrationButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/End_field_calibration" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <Button
-                    android:id="@+id/readReg03Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/read_reg_03" />
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
                 android:layout_weight="1"
                 android:text="@string/devices_data" />
         </LinearLayout>
@@ -137,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text=""
+                android:textSize="20dp"
                 android:textColor="@color/white" />
         </LinearLayout>
 

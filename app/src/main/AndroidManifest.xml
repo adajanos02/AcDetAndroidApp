@@ -46,6 +46,8 @@
         <activity android:name=".activities.StartRideActivity"/>
         <activity android:name=".activities.ContactsActivity"/>
         <activity android:name=".activities.SignUpActivity"/>
+        <activity android:name=".activities.SosAlertActivity"/>
+        <activity android:name=".activities.AreYouOkayCheckActivity"/>
     </application>
 
 </manifest>

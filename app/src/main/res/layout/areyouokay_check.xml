@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/login_background"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="16dp"
+        android:id="@+id/countdowntext"/>
+
+    <ImageView
+        android:layout_width="277dp"
+        android:layout_height="241dp"
+        android:src="@drawable/baseline_campaign_24"
+        />
+
+    <!-- Szöveg: Are you okay? -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Are you okay?"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="16dp" />
+
+    <!-- YES gomb -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="YES"
+        android:height="150dp"
+        android:width="300dp"
+        android:background="@drawable/rounded_corner"
+        android:textAllCaps="true"
+        android:layout_marginTop="32dp"
+        android:id="@+id/okaybtn"
+        android:textSize="80dp" />
+
+</LinearLayout>
