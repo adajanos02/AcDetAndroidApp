@@ -27,19 +27,16 @@ public class AreYouOkayCheckActivity extends AppCompatActivity {
 
 
         // 10 másodperces számláló
-        thread = new Thread(timer);
-        thread.start();
-
+        //thread = new Thread(timer);
+        sra.accidentHappend = true;
+        //thread.start();
 
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (!thread.isInterrupted()) {
-                    thread.interrupt();
-                    timer.seconds = 10;
-                }
+                sra.fakeAccidentListener();
                 Log.v("COUNTDOWN", "Megszakitva!");
                 Intent intent = new Intent(AreYouOkayCheckActivity.this, StartRideActivity.class);
                 startActivity(intent);

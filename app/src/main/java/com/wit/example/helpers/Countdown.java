@@ -33,9 +33,11 @@ public class Countdown implements Runnable{
             sra.sosAlert();
 
         }
-        if (StartRideActivity.accelerationFlag) {
+        else if (StartRideActivity.accelerationFlag) {
             sra.accidentHappend = true;
             sra.destroyed = true;
+            sra.accidentHappendListener();
+
 
 
         }

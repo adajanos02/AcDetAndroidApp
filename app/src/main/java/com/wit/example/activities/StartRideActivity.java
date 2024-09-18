@@ -220,14 +220,28 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         }
     }
 
-
-    private String getDeviceData(Bwt901ble bwt901ble) {
-        double min = 0.0;
+    public void accidentHappendListener() {
         if (accidentHappend) {
+            timer.seconds = 10;
+            thread = new Thread(timer);
+            thread.start();
+
             Intent intent = new Intent(StartRideActivity.this, AreYouOkayCheckActivity.class);
             startActivity(intent);
 
         }
+    }
+
+    public void fakeAccidentListener() {
+        if (!thread.isInterrupted()) {
+            thread.interrupt();
+            timer.seconds = 10;
+        }
+    }
+
+    private String getDeviceData(Bwt901ble bwt901ble) {
+        double min = 0.0;
+
 
         StringBuilder builder = new StringBuilder();
         if (bwt901ble.getDeviceData(WitSensorKey.AngleX) != null) {
