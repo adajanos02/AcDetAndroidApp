@@ -18,64 +18,60 @@
         <ImageView
             android:layout_width="160dp"
             android:layout_height="160dp"
-            android:src="@drawable/icon_account_circle"
-            />
+            android:src="@drawable/icon_account_circle" />
 
         <EditText
+            android:id="@+id/username_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_corner"
             android:hint="UserName"
+            android:inputType="text"
+            android:padding="18dp"
             android:text="adamecz36@gmail.com"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:textSize="20sp"
-            android:background="@drawable/rounded_corner"
-            android:padding="18dp"
-            android:inputType="text"
-            android:id="@+id/username_input"/>
+            android:textSize="20sp" />
 
         <EditText
+            android:id="@+id/password_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_corner"
             android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="18dp"
             android:text="Patkany02"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:textSize="20sp"
-            android:background="@drawable/rounded_corner"
-            android:padding="18dp"
-            android:inputType="textPassword"
-            android:id="@+id/password_input"/>
+            android:textSize="20sp" />
 
         <Button
+            android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login"
-            android:backgroundTint="@color/white"
-            android:textColor="#3B84F1"
-            android:padding="18dp"
             android:layout_marginTop="32dp"
-            android:textSize="20sp"
-            android:id="@+id/login_btn"/>
+            android:backgroundTint="@color/white"
+            android:padding="18dp"
+            android:text="Login"
+            android:textColor="#3B84F1"
+            android:textSize="20sp" />
+
         <Button
+            android:id="@+id/signup_btn"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Sign Up"
-            android:backgroundTint="@color/white"
-            android:textColor="#3B84F1"
-            android:padding="18dp"
             android:layout_marginTop="32dp"
-            android:textSize="20sp"
-            android:id="@+id/signup_btn"/>
-
+            android:backgroundTint="@color/white"
+            android:padding="18dp"
+            android:text="Sign Up"
+            android:textColor="#3B84F1"
+            android:textSize="20sp" />
 
 
     </LinearLayout>
-
-
-
 
 
 </RelativeLayout>
