@@ -37,6 +37,8 @@ public class AreYouOkayCheckActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 sra.fakeAccidentListener();
+                sra.accidentHappend = false;
+                StartRideActivity.accelerationFlag = false;
                 Log.v("COUNTDOWN", "Megszakitva!");
                 Intent intent = new Intent(AreYouOkayCheckActivity.this, StartRideActivity.class);
                 startActivity(intent);

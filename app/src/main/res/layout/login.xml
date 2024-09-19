@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:background="@drawable/rounded_corner"
+            android:background="@drawable/intro_btn_background"
             android:hint="UserName"
             android:inputType="text"
             android:padding="18dp"
@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_corner"
+            android:background="@drawable/intro_btn_background"
             android:hint="Password"
             android:inputType="textPassword"
             android:padding="18dp"
@@ -48,26 +48,28 @@
             android:textColorHint="@color/white"
             android:textSize="20sp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:backgroundTint="@color/white"
+            android:background="@drawable/intro_btn_background"
             android:padding="18dp"
             android:text="Login"
-            android:textColor="#3B84F1"
+            style="@android:style/Widget.Button"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signup_btn"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:backgroundTint="@color/white"
+            style="@android:style/Widget.Button"
+            android:background="@drawable/intro_btn_background"
             android:padding="18dp"
             android:text="Sign Up"
-            android:textColor="#3B84F1"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
 

@@ -37,22 +37,28 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/startSearchButton"
                 android:textSize="18dp"
+                style="@android:style/Widget.Button"
+                android:background="@drawable/intro_btn_background"
                 android:layout_margin="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:layout_weight="1"
+                android:textColor="@color/white"
                 android:text="@string/start_search" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/stopSearchButton"
                 android:layout_width="wrap_content"
+                style="@android:style/Widget.Button"
+                android:background="@drawable/intro_btn_background"
                 android:layout_margin="10dp"
                 android:textSize="18sp"
                 android:layout_height="70dp"
                 android:layout_weight="1"
+                android:textColor="@color/white"
                 android:text="@string/stop_search" />
         </LinearLayout>
 

@@ -15,49 +15,64 @@
         android:gravity="center"
         android:layout_above="@id/logout_btn">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_start_ride"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="Start Ride"
+            style="@android:style/Widget.Button"
+            android:textColor="@color/white"
+            android:background="@drawable/intro_btn_background"
             android:textSize="30dp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_contacts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/button_start_ride"
             android:layout_marginBottom="16dp"
             android:text="Contacts"
+            style="@android:style/Widget.Button"
+            android:textColor="@color/white"
+            android:background="@drawable/intro_btn_background"
             android:textSize="30dp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_find_me"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/button_contacts"
             android:layout_marginBottom="16dp"
             android:text="Find Me"
+            style="@android:style/Widget.Button"
+            android:textColor="@color/white"
+            android:background="@drawable/intro_btn_background"
             android:textSize="30dp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_sos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/button_find_me"
             android:text="SOS"
+            style="@android:style/Widget.Button"
+            android:textColor="@color/white"
+            android:background="@drawable/intro_btn_background"
             android:textSize="30dp" />
 
     </RelativeLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/logout_btn"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
+        android:textColor="@color/white"
+        style="@android:style/Widget.Button"
         android:layout_alignParentRight="true"
+        android:background="@drawable/intro_btn_background"
         android:text="Log out"
         android:textSize="30dp"
         android:gravity="center"/>

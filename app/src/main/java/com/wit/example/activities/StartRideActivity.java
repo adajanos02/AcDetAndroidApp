@@ -79,6 +79,9 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         WitBluetoothManager.initInstance(this);
+        if (!bwt901bleList.isEmpty()) {
+            refreshDataTh();
+        }
 
 
         // 开始搜索按钮
@@ -221,9 +224,15 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     }
 
     public void accidentHappendListener() {
-        if (accidentHappend) {
-            timer.seconds = 10;
-            thread = new Thread(timer);
+        if (!accelerationFlag) {
+
+            Countdown countdown = new Countdown(10, new Countdown.OnCountdownFinishListener() {
+                @Override
+                public void onCountdownFinish() {
+                    sosAlert();
+                }
+            });
+            thread = new Thread(countdown);
             thread.start();
 
             Intent intent = new Intent(StartRideActivity.this, AreYouOkayCheckActivity.class);
@@ -236,6 +245,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         if (!thread.isInterrupted()) {
             thread.interrupt();
             timer.seconds = 10;
+            accidentHappend = false;
         }
     }
 
@@ -543,21 +553,16 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     public static boolean accelerationFlag = false;
 
-    private void startSensorMonitoring(Bwt901ble bwt901ble) {
-        // Figyeld a szenzort itt, például egy időzítővel vagy szenzor listenerrel.
-        // Az egyszerűség kedvéért feltételezzük, hogy a sensorValue folyamatosan frissül.
-
-        if (Integer.parseInt(bwt901ble.getDeviceData(WitSensorKey.AngleX)) > 30 && !timerActive) {
-            startTimer();
-            stopLocationUpdates();
-        }
-    }
     private void startTimer() {
+        Countdown countdown = new Countdown(10, new Countdown.OnCountdownFinishListener() {
+            @Override
+            public void onCountdownFinish() {
+                accidentHappendListener();
+            }
+        });
         timerActive = true;
-
-
         // 10 másodperces számláló
-        thread = new Thread(timer);
+        thread = new Thread(countdown);
         thread.start();
 
     }

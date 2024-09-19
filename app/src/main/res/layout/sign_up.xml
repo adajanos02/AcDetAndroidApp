@@ -13,12 +13,12 @@
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/intro_btn_background"
         android:hint="Email"
         android:layout_marginBottom="20dp"
         android:textSize="20sp"
         android:inputType="textEmailAddress"
         android:textColorHint="@color/white"
-        android:background="@drawable/rounded_corner"
         android:padding="10dp"/>
 
     <EditText
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/intro_btn_background"
         android:textColorHint="@color/white"
         android:hint="Password"
         android:inputType="textPassword"
@@ -40,17 +40,20 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:textColorHint="@color/white"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/intro_btn_background"
         android:hint="Phone Number"
         android:inputType="phone"
         android:padding="10dp"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
+        android:textColor="@color/white"
         android:padding="10dp"
+        style="@android:style/Widget.Button"
+        android:background="@drawable/intro_btn_background"
         android:textSize="20sp"
         android:layout_marginTop="20dp"/>
 
