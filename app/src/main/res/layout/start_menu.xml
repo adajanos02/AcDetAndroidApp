@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/button_contacts"
             android:layout_marginBottom="16dp"
-            android:text="Find Me"
+            android:text="Personal Data"
             style="@android:style/Widget.Button"
             android:textColor="@color/white"
             android:background="@drawable/intro_btn_background"

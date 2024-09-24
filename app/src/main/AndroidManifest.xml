@@ -49,6 +49,7 @@
         <activity android:name=".activities.SignUpActivity"/>
         <activity android:name=".activities.SosAlertActivity"/>
         <activity android:name=".activities.AreYouOkayCheckActivity"/>
+        <activity android:name=".activities.PersonalInfoActivity"/>
     </application>
 
 </manifest>

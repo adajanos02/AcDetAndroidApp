@@ -56,7 +56,7 @@ public class MenuActivity extends AppCompatActivity {
         findMeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, FindMeActivity.class);
+                Intent intent = new Intent(MenuActivity.this, PersonalInfoActivity.class);
                 startActivity(intent);
             }
         });

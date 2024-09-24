@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background"
+    tools:context=".activities.PersonalInfoActivity">
+
+
+    <TextView
+        android:id="@+id/pagename"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Personal Data"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <!-- Teljes név mező -->
+
+    <TextView
+        android:id="@+id/tvFullNameLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Full name:"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintTop_toBottomOf="@id/pagename" />
+
+    <EditText
+        android:id="@+id/etFullName"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Adja meg a teljes nevét"
+        android:textColorHint="@color/white"
+        android:background="@drawable/intro_btn_background"
+        app:layout_constraintTop_toBottomOf="@id/tvFullNameLabel"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/white"
+        android:layout_marginRight="10dp"
+        android:padding="10dp" />
+
+    <!-- TAJ-szám mező -->
+    <TextView
+        android:id="@+id/tvTAJLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TAJ-szám:"
+        app:layout_constraintTop_toBottomOf="@id/etFullName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"/>
+
+    <EditText
+        android:id="@+id/etTAJ"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:inputType="number"
+        android:background="@drawable/intro_btn_background"
+        app:layout_constraintTop_toBottomOf="@id/tvTAJLabel"
+        android:hint="Adja meg a TAJ számát"
+        android:textColorHint="@color/white"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="10dp"/>
+
+    <!-- Vércsoport kiválasztása legördülő menü -->
+    <TextView
+        android:id="@+id/tvBloodTypeLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vércsoport:"
+        app:layout_constraintTop_toBottomOf="@id/etTAJ"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+
+    <Spinner
+        android:id="@+id/spinnerBloodType"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:entries="@array/blood_types"
+        android:background="@drawable/intro_btn_background"
+        app:layout_constraintTop_toBottomOf="@id/tvBloodTypeLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/white"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+    <!-- Allergiák mező -->
+    <TextView
+        android:id="@+id/tvAllergiesLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Allergiák:"
+        app:layout_constraintTop_toBottomOf="@id/spinnerBloodType"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/etAllergies"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Adja meg az allergiákat"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tvAllergiesLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/intro_btn_background"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="10dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSave"
+        style="@android:style/Widget.Button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="30dp"
+        android:background="@drawable/intro_btn_background"
+        android:gravity="center"
+        android:text="Save Data"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etAllergies" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

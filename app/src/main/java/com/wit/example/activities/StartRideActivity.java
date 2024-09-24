@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationServices;
 import com.wit.example.R;
 import com.wit.example.helpers.Countdown;
 import com.wit.example.helpers.DistanceCalculator;
+import com.wit.example.helpers.MongoDbInitializer;
 import com.wit.example.helpers.SmsHelper;
 import com.wit.witsdk.modular.sensor.device.exceptions.OpenDeviceException;
 import com.wit.witsdk.modular.sensor.example.ble5.Bwt901ble;
@@ -61,7 +62,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     private static final String TAG = "MainActivity";
     private List<Bwt901ble> bwt901bleList = new ArrayList<>();
 
-    private MongoCollection<Document> mongoCollection;
+    //private MongoCollection<Document> mongoCollection;
 
     public boolean destroyed = true;
     public boolean accidentHappend = false;
@@ -386,9 +387,11 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     }
 
     private void updateLocation(double latitude, double longitude) {
-        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
-        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
-        mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
+
+        MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Location");
+//        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
+//        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
+//        mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
 
         //LoginActivity.user = LoginActivity.app.currentUser();
 
@@ -452,10 +455,10 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
 
     private void userAlert(double latitude, double longitude) {
-
-        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
-        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
-        mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
+        MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Location");
+//        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
+//        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
+//        mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
 
 
         RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find().iterator();
@@ -481,36 +484,20 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                             }
                         }
                     }
-
                 }
-
-
             } else {
                 Log.v("Task error", task.getError().toString());
             }
         });
     }
 
-    public static float calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-
-
-
-        Location location1 = new Location("pointA");
-        location1.setLatitude(lat1);
-        location1.setLongitude(lon1);
-
-        Location location2 = new Location("pointB");
-        location2.setLatitude(lat2);
-        location2.setLongitude(lon2);
-
-        return location1.distanceTo(location2);
-    }
-
 
     public void sendSmsToContacts(String location) {
-        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
-        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
-        mongoCollection = LoginActivity.mongoDatabase.getCollection("Contacts");
+
+        MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Contacts");
+//        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
+//        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
+//        mongoCollection = LoginActivity.mongoDatabase.getCollection("Contacts");
 
         Document queryFilter = new Document().append("userId", LoginActivity.user.getId());
 
@@ -567,39 +554,6 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     }
 
-    private void startSpeedMeasurement() {
-        speedMeasurementActive = true;
-
-        // Helyzetváltozás figyelése
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
-            return;
-        }
-
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                if (lastLocation != null) {
-                    long timeDiff = System.currentTimeMillis() - lastTime;
-                    float speed = location.getSpeed();
-                    double acceleration = (speed - lastLocation.getSpeed()) / (timeDiff / 1000.0);
-
-                    if (acceleration > accelerationThreshold) {
-                        accelerationFlag = true;
-                        Toast.makeText(StartRideActivity.this, "Acceleration threshold exceeded!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                lastLocation = location;
-                lastTime = System.currentTimeMillis();
-            }
-
-
-        });
-
-
-    }
 
     @Override
     protected void onPause() {
