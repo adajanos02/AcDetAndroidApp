@@ -1,7 +1,9 @@
 package com.wit.example.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
     private Spinner bloodTypeSpinner;
     private EditText allergiesEditText;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
         tajEditText = findViewById(R.id.etTAJ);
         bloodTypeSpinner = findViewById(R.id.spinnerBloodType);
         allergiesEditText = findViewById(R.id.etAllergies);
+
 
         // Vércsoport kiválasztásának ellenőrzése
         findViewById(R.id.btnSave).setOnClickListener(new View.OnClickListener() {
@@ -44,9 +48,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
                     Toast.makeText(PersonalInfoActivity.this, "Kérjük, válassza ki a vércsoportját!", Toast.LENGTH_SHORT).show();
                 } else {
                     // Adatok mentése vagy további feldolgozása
-                    String fullName = fullNameEditText.getText().toString();
-                    String tajNumber = tajEditText.getText().toString();
-                    String allergies = allergiesEditText.getText().toString();
+                   updatePersonalData();
 
                     // Például az adatok ellenőrzése és feldolgozása itt folytatható...
                     Toast.makeText(PersonalInfoActivity.this, "Adatok mentve!", Toast.LENGTH_SHORT).show();
@@ -68,6 +70,27 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 fullNameEditText.setText(currentDoc.getString("fullname"));
                 tajEditText.setText(currentDoc.getString("tajszam"));
                 allergiesEditText.setText(currentDoc.getString("allergiak"));
+                bloodTypeSpinner.setSelection(currentDoc.getInteger("bloodType"));
+            }
+        });
+    }
+
+    public void updatePersonalData() {
+        MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Location");
+
+        Document query = new Document().append("userId", LoginActivity.user.getId());
+
+        Document update = new Document().append("$set",
+                new Document().append("fullname", fullNameEditText.getText())
+                        .append("tajszam", tajEditText.getText())
+                        .append("allergiak", allergiesEditText.getText()));
+
+        mongoCollection.updateOne(query, update).getAsync(result -> {
+            if (result.isSuccess()) {
+                Log.v("UpdateFunction", "Updated Data");
+
+            } else {
+                Log.v("UpdateFunction", "Error" + result.getError().toString());
             }
         });
     }

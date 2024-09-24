@@ -98,7 +98,7 @@
 
     <Spinner
         android:id="@+id/spinnerBloodType"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:entries="@array/blood_types"
         android:background="@drawable/intro_btn_background"
@@ -107,8 +107,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:textColor="@color/white"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="10dp" />
 
     <!-- Allergiák mező -->
     <TextView
