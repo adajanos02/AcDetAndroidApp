@@ -3,7 +3,6 @@ package com.wit.example.activities;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -73,7 +72,13 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 bloodTypeSpinner.setSelection(currentDoc.getInteger("bloodType"));
             }
         });
+//        LoginActivity.userInfo.fullname = fullNameEditText.getText().toString();
+//        LoginActivity.userInfo.tajszam = tajEditText.getText().toString();
+//        LoginActivity.userInfo.allergiak = allergiesEditText.getText().toString();
+//        LoginActivity.userInfo.bloodtype = (int)bloodTypeSpinner.getSelectedItemId();
+
     }
+
 
     public void updatePersonalData() {
         MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Location");
@@ -81,9 +86,10 @@ public class PersonalInfoActivity extends AppCompatActivity {
         Document query = new Document().append("userId", LoginActivity.user.getId());
 
         Document update = new Document().append("$set",
-                new Document().append("fullname", fullNameEditText.getText())
-                        .append("tajszam", tajEditText.getText())
-                        .append("allergiak", allergiesEditText.getText()));
+                new Document().append("fullname", fullNameEditText.getText().toString())
+                        .append("tajszam", tajEditText.getText().toString())
+                        .append("allergiak", allergiesEditText.getText().toString())
+                        .append("bloodType", (int)bloodTypeSpinner.getSelectedItemId()));
 
         mongoCollection.updateOne(query, update).getAsync(result -> {
             if (result.isSuccess()) {

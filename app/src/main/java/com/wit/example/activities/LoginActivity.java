@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.wit.example.R;
+import com.wit.example.models.PersonalUserInfo;
 
 import io.realm.Realm;
 import io.realm.mongodb.App;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity{
     static String AppId = "android_project-ibyjncm";
 
     public static User user;
+    public static PersonalUserInfo userInfo;
     public static MongoDatabase mongoDatabase;
     public static MongoClient mongoClient;
 
