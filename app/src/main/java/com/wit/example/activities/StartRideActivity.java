@@ -66,6 +66,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     public boolean destroyed = true;
     public boolean accidentHappend = false;
+    SmsHelper smsHelper = new SmsHelper();
 
 
     @Override
@@ -74,6 +75,9 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Location");
+        smsHelper.smsTextBuilder(mongoCollection);
 
         startLocationUpdates();
 
@@ -225,7 +229,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
     }
 
     public void accidentHappendListener() {
-        if (!accelerationFlag) {
+        if (accelerationFlag) {
 
             Countdown countdown = new Countdown(10, new Countdown.OnCountdownFinishListener() {
                 @Override
@@ -436,11 +440,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                     // Hely koordináták lekérése
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
-                    String address = String.valueOf(latitude) + "$" + String.valueOf(longitude);
-                    if (address != null) {
                         userAlert(latitude, longitude);
                         sendSmsToContacts(getAddressFromCoordinates(latitude, longitude));
-                    }
                 }
             }
         };
@@ -456,17 +457,17 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     private void userAlert(double latitude, double longitude) {
         MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Location");
-//        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
-//        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
-//        mongoCollection = LoginActivity.mongoDatabase.getCollection("Location");
 
 
         RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find().iterator();
         LoginActivity.user = LoginActivity.app.currentUser();
+//        SmsHelper smsHelper = new SmsHelper();
+//        smsHelper.smsTextBuilder(mongoCollection);
 
         findTask.getAsync(task -> {
             if (task.isSuccess()) {
                 MongoCursor<Document> results = task.get();
+                //SmsHelper smsHelper = new SmsHelper(mongoCollection);
                 while (results.hasNext()) {
                     Document currentDoc = results.next();
                     if (!Objects.equals(currentDoc.getString("userId"), LoginActivity.user.getId())) {
@@ -479,7 +480,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
                             Log.v("DISTANCE", String.valueOf(distance));
                             if (distance < 30) {
-                                SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: " + getAddressFromCoordinates(latitude, longitude));
+                                SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: " + getAddressFromCoordinates(latitude, longitude) + smsHelper.persDetails);
                                 Toast.makeText(getApplicationContext(), "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
                             }
                         }
@@ -502,16 +503,20 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         Document queryFilter = new Document().append("userId", LoginActivity.user.getId());
 
         RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryFilter).iterator();
-
+//        SmsHelper smsHelper = new SmsHelper();
+//
+//        smsHelper.smsTextBuilder(mongoCollection);
         findTask.getAsync(task -> {
             if (task.isSuccess()) {
+                //SmsHelper smsHelper = new SmsHelper(mongoCollection);
                 MongoCursor<Document> results = task.get();
                 while (results.hasNext()) {
                     Document currentDoc = results.next();
+                    StringBuilder builder = new StringBuilder();
                     String accident = "Baleset történt ezen a címen: " + location;
-                    Log.v("Adress", accident);
+                    Log.v("Address", accident);
                     if (currentDoc.getString("phone") != null) {
-                        SmsHelper.sendSms(currentDoc.getString("phone"), accident);
+                        SmsHelper.sendSms(currentDoc.getString("phone"), accident + smsHelper.persDetails);
                         Toast.makeText(getApplicationContext(), "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
                     }
 

@@ -72,10 +72,6 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 bloodTypeSpinner.setSelection(currentDoc.getInteger("bloodType"));
             }
         });
-//        LoginActivity.userInfo.fullname = fullNameEditText.getText().toString();
-//        LoginActivity.userInfo.tajszam = tajEditText.getText().toString();
-//        LoginActivity.userInfo.allergiak = allergiesEditText.getText().toString();
-//        LoginActivity.userInfo.bloodtype = (int)bloodTypeSpinner.getSelectedItemId();
 
     }
 
