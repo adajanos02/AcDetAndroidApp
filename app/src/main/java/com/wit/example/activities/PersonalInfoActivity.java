@@ -60,9 +60,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
         MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Location");
 
         Document query = new Document().append("userId", LoginActivity.user.getId());
-
         RealmResultTask<MongoCursor<Document>> result = mongoCollection.find(query).iterator();
-
         result.getAsync(task -> {
             if (task.isSuccess()){
                 Document currentDoc = task.get().next();
@@ -80,7 +78,6 @@ public class PersonalInfoActivity extends AppCompatActivity {
         MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Location");
 
         Document query = new Document().append("userId", LoginActivity.user.getId());
-
         Document update = new Document().append("$set",
                 new Document().append("fullname", fullNameEditText.getText().toString())
                         .append("tajszam", tajEditText.getText().toString())

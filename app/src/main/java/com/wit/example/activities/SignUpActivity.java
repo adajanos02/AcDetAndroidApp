@@ -48,34 +48,23 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void Register(String email, String password, String phoneNumber) {
         LoginActivity.app = new App(new AppConfiguration.Builder(LoginActivity.AppId).build());
-
-
         Credentials credentials = Credentials.emailPassword(email, password);
         LoginActivity.user = LoginActivity.app.currentUser();
-
-
         LoginActivity.app.getEmailPassword().registerUserAsync(email,password, it -> {
             if (it.isSuccess()){
                 Log.v("User", "Sign up successfully");
-
                 LoginActivity.app.loginAsync(credentials, new App.Callback<io.realm.mongodb.User>() {
                     @Override
                     public void onResult(App.Result<io.realm.mongodb.User> result) {
                         if (result.isSuccess()) {
                             Log.v("User", "Logged in successfully");
                             LoginActivity.user = LoginActivity.app.currentUser();
-                            PushNewUser(email, password, phoneNumber);
-                            Intent intent = new Intent(SignUpActivity.this, MenuActivity.class);
-                            startActivity(intent);
-
                         }
                         else {
                             Log.v("User", "Failed to login");
                         }
                     }
                 });
-//                Intent intent = new Intent(SignUpActivity.this, MenuActivity.class);
-//                startActivity(intent);
             }
             else{
                 Log.v("User", "Sign up failed");

@@ -20,8 +20,6 @@ import io.realm.mongodb.mongo.iterable.MongoCursor;
 public class SmsHelper {
 
     public String persDetails = "";
-//
-
 
     public static void sendSms(String phoneNumber, String message) {
         SmsManager smsManager = SmsManager.getDefault();
@@ -37,7 +35,6 @@ public class SmsHelper {
         Document query = new Document().append("userId", LoginActivity.user.getId());
 
         RealmResultTask<MongoCursor<Document>> result = mongoCollection.find(query).iterator();
-        String valami = "";
         StringBuilder builder = new StringBuilder();
         result.getAsync(task -> {
             if (task.isSuccess()){

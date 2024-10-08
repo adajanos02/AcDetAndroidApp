@@ -1,6 +1,9 @@
 package com.wit.example.helpers;
 
+import static io.realm.Realm.getApplicationContext;
+
 import android.util.Log;
+import android.widget.Toast;
 
 import com.wit.example.activities.StartRideActivity;
 
@@ -29,6 +32,7 @@ public class Countdown implements Runnable{
     public void run() {
         while (seconds > 0) {
             Log.v("COUNTDOWN", "seconds remaining: " + seconds);
+            //Toast.makeText(getApplicationContext(), seconds, Toast.LENGTH_LONG).show();
             seconds--;
             try {
                 Thread.sleep(1000); // 1 másodperc várakozás
@@ -42,18 +46,6 @@ public class Countdown implements Runnable{
         if (onCountdownFinishListener != null) {
             onCountdownFinishListener.onCountdownFinish();
         }
-//        if (sra.accidentHappend) {
-//            sra.sosAlert();
-//
-//        }
-//        else if (StartRideActivity.accelerationFlag) {
-//            sra.accidentHappend = true;
-//            //sra.destroyed = true;
-//            sra.accidentHappendListener();
-//
-//
-//
-//        }
 
     }
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.wit.example.R;
+import com.wit.example.helpers.MongoDbInitializer;
 
 import org.bson.Document;
 
@@ -41,10 +42,8 @@ public class ContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.contact_list);
-
-        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
-        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
-        mongoCollection = LoginActivity.mongoDatabase.getCollection("Contacts");
+        LoginActivity.user = LoginActivity.app.currentUser();
+        MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Contacts");
 
         list = findViewById(R.id.contact_list);
         phoneList = new ArrayList<>();
@@ -89,16 +88,9 @@ public class ContactsActivity extends AppCompatActivity {
 
     public void getContactList() {
         phoneList.clear();
-        LoginActivity.mongoClient = LoginActivity.user.getMongoClient("mongodb-atlas");
-        LoginActivity.mongoDatabase = LoginActivity.mongoClient.getDatabase("User");
-        mongoCollection = LoginActivity.mongoDatabase.getCollection("Contacts");
-        LoginActivity.user = LoginActivity.app.currentUser();
-
 
         Document queryFilter = new Document().append("userId",LoginActivity.user.getId());
-
         RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryFilter).iterator();
-
         findTask.getAsync(task -> {
             if (task.isSuccess()) {
                 MongoCursor<Document> results = task.get();
@@ -109,15 +101,11 @@ public class ContactsActivity extends AppCompatActivity {
                     }
                     list.setAdapter(adapter);
                 }
-
-
             }
             else{
                 Log.v("Task error",task.getError().toString());
             }
         });
-
-
     }
 
 

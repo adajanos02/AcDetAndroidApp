@@ -64,8 +64,9 @@ public class MenuActivity extends AppCompatActivity {
         sosButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, SOSActivity.class);
+                Intent intent = new Intent(MenuActivity.this, SosAlertActivity.class);
                 startActivity(intent);
+
             }
         });
     }
