@@ -45,6 +45,68 @@
         android:inputType="phone"
         android:padding="10dp"/>
 
+    <EditText
+        android:id="@+id/etFullName"
+        android:layout_width="match_parent"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:textColorHint="@color/white"
+        android:background="@drawable/intro_btn_background"
+        app:layout_constraintTop_toBottomOf="@id/phoneEditText"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"
+        android:padding="10dp" />
+
+
+
+    <EditText
+        android:id="@+id/etTAJ"
+        android:layout_width="match_parent"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:background="@drawable/intro_btn_background"
+        app:layout_constraintTop_toBottomOf="@id/tvTAJLabel"
+        android:hint="Health insrurance number"
+        android:textColorHint="@color/white"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+        android:padding="10dp"/>
+
+    <EditText
+        android:id="@+id/etAllergies"
+        android:layout_width="match_parent"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:hint="Allergies"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tvAllergiesLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/intro_btn_background"
+        android:layout_marginBottom="20dp"
+        android:padding="10dp"/>
+
+
+    <Spinner
+        android:id="@+id/spinnerBloodType"
+        android:layout_width="match_parent"
+        android:autofillHints="Blood Type"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:entries="@array/blood_types"
+        android:background="@drawable/intro_btn_background"
+        app:layout_constraintTop_toBottomOf="@id/tvBloodTypeLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"
+        android:padding="10dp" />
+
+
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/registerButton"
         android:layout_width="match_parent"

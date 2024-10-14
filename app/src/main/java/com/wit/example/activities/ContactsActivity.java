@@ -88,7 +88,8 @@ public class ContactsActivity extends AppCompatActivity {
 
     public void getContactList() {
         phoneList.clear();
-
+        LoginActivity.user = LoginActivity.app.currentUser();
+        MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Contacts");
         Document queryFilter = new Document().append("userId",LoginActivity.user.getId());
         RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryFilter).iterator();
         findTask.getAsync(task -> {
