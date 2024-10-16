@@ -25,7 +25,6 @@ public class SmsHelper {
         SmsManager smsManager = SmsManager.getDefault();
         //message = message + persDetails;
         ArrayList<String> parts = smsManager.divideMessage(message);
-        //smsManager.sendTextMessage(phoneNumber, null, message, null, null);
         smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
         Log.v("SMS", "SMS sent!" + phoneNumber);
     }
@@ -46,6 +45,10 @@ public class SmsHelper {
                 persDetails = builder.toString();
             }
         });
+    }
+
+    public static String gpsLinkGenerator(double latitude, double longitude) {
+       return "https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude;
     }
 
 }

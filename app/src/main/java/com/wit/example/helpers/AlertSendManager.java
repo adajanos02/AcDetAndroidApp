@@ -49,7 +49,10 @@ public class AlertSendManager extends AppCompatActivity {
 
                             Log.v("DISTANCE", String.valueOf(distance));
                             if (distance < 30) {
-                                SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: " + getAddressFromCoordinates(latitude, longitude) + StartRideActivity.smsHelper.persDetails);
+                                SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: "
+                                        + getAddressFromCoordinates(latitude, longitude)
+                                        + StartRideActivity.smsHelper.persDetails
+                                        + SmsHelper.gpsLinkGenerator(latitude, longitude));
                                 Toast.makeText(getApplicationContext(), "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
                             }
                         }
@@ -76,10 +79,11 @@ public class AlertSendManager extends AppCompatActivity {
                 MongoCursor<Document> results = task.get();
                 while (results.hasNext()) {
                     Document currentDoc = results.next();
-                    String accident = "Baleset történt ezen a címen: " + location;
-                    Log.v("Address", accident);
                     if (currentDoc.getString("phone") != null) {
-                        SmsHelper.sendSms(currentDoc.getString("phone"), accident + StartRideActivity.smsHelper.persDetails);
+                        SmsHelper.sendSms(currentDoc.getString("phone"), "Baleset történt ezen a címen: "
+                                + getAddressFromCoordinates(latitude, longitude)
+                                + StartRideActivity.smsHelper.persDetails
+                                + SmsHelper.gpsLinkGenerator(latitude, longitude));
                         Toast.makeText(context, "Sent: " + currentDoc.getString("phone"), Toast.LENGTH_LONG).show();
                     }
 
