@@ -2,19 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     android:background="@drawable/login_background"
+    android:gravity="center"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/countdowntext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
         android:layout_marginTop="16dp"
-        android:id="@+id/countdowntext"/>
+        android:textColor="@color/white"
+        android:textSize="50sp"
+        android:textStyle="bold" />
 
     <!-- Szöveg: Are you okay? -->
     <ImageView
@@ -23,7 +23,7 @@
         android:src="@drawable/baseline_campaign_24" />
 
     <TextView
-        android:layout_width="355dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
@@ -34,17 +34,17 @@
 
     <!-- YES gomb -->
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/okaybtn"
+        style="@android:style/Widget.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="Yes"
-        android:height="150dp"
-        android:width="300dp"
-        android:textAllCaps="true"
-        style="@android:style/Widget.Button"
-        android:background="@drawable/intro_btn_background"
         android:layout_marginTop="32dp"
-        android:id="@+id/okaybtn"
+        android:width="300dp"
+        android:height="150dp"
+        android:background="@drawable/intro_btn_background"
+        android:text="Yes"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
         android:textSize="80dp" />
 
 </LinearLayout>
