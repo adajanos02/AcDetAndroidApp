@@ -29,6 +29,7 @@ public class MenuActivity extends AppCompatActivity {
         Button contactsButton = findViewById(R.id.button_contacts);
         Button findMeButton = findViewById(R.id.button_find_me);
         Button sosButton = findViewById(R.id.button_sos);
+        Button trafficButton = findViewById(R.id.trafficInfo);
         Button logoutButton = findViewById(R.id.logout_btn);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +69,14 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+        trafficButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, TrafficInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
         sosButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +89,6 @@ public class MenuActivity extends AppCompatActivity {
 
     private void checkForSmsPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            // Ha nincs engedély, akkor kérje
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SMS_PERMISSION_CODE);
         }
     }

@@ -51,10 +51,22 @@
             android:textSize="30dp" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_sos"
+            android:id="@+id/trafficInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/button_find_me"
+            android:layout_marginBottom="16dp"
+            android:text="Traffic Information"
+            style="@android:style/Widget.Button"
+            android:textColor="@color/white"
+            android:background="@drawable/intro_btn_background"
+            android:textSize="30dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_sos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/trafficInfo"
             android:text="SOS"
             style="@android:style/Widget.Button"
             android:textColor="@color/white"

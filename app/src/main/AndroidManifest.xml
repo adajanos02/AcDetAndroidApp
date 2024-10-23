@@ -51,6 +51,7 @@
         <activity android:name=".activities.AreYouOkayCheckActivity"/>
         <activity android:name=".activities.PersonalInfoActivity"/>
         <activity android:name=".helpers.MongoDbInitializer"/>
+        <activity android:name=".activities.TrafficInfoActivity"/>
     </application>
 
 </manifest>
