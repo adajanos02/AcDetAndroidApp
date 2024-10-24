@@ -22,13 +22,13 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/news_list"
         android:layout_below="@id/app_title"
-        android:textSize="30dp"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:textColor="@color/white"
-        android:background="@drawable/rounded_corner"
-        android:text="Your data will be displayed here"/>
+        android:id="@+id/news_list"
+        android:scrollbars="vertical"
+        android:layout_marginTop="12dp"
+        tools:listitem="@layout/list_item"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"
+        />
 
 </RelativeLayout>
