@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
+import android.widget.DatePicker;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.wit.example.activities.LoginActivity;
@@ -11,6 +12,8 @@ import com.wit.example.activities.StartRideActivity;
 import org.bson.Document;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -67,7 +70,6 @@ public class AlertSendManager extends AppCompatActivity {
 
     public void sendSmsToContacts(double latitude, double longitude) {
 
-        String location = getAddressFromCoordinates(latitude, longitude);
         LoginActivity.user = LoginActivity.app.currentUser();
         MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "Contacts");
 
@@ -92,6 +94,29 @@ public class AlertSendManager extends AppCompatActivity {
                 Log.v("Task error", task.getError().toString());
             }
         });
+    }
+
+    public void pushAccidentInfo(double latitude, double longitude) {
+        LoginActivity.user = LoginActivity.app.currentUser();
+        MongoCollection<Document> mongoCollection = MongoDbInitializer.initialize("mongodb-atlas", "User", "AccidentInfo");
+        long currentTimeMillis = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String currentTime = sdf.format(new Date(currentTimeMillis));
+        Document document = new Document()
+                .append("title", "Baleset")
+                .append("address", getAddressFromCoordinates(latitude, longitude))
+                .append("image", "1")
+                .append("date", currentTime);
+
+        mongoCollection.insertOne(document).getAsync(result -> {
+            if (result.isSuccess()){
+                Log.v("Data", "Data inserted successfully");
+            }
+            else {
+                Log.v("Data", "Error: " + result.getError().toString());
+            }
+        });
+
     }
 
     public String getAddressFromCoordinates(double latitude, double longitude) {

@@ -367,6 +367,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
                     double longitude = location.getLongitude();
                     sendManager.userAlert(latitude, longitude);
                     sendManager.sendSmsToContacts(latitude, longitude);
+                    sendManager.pushAccidentInfo(latitude, longitude);
                 }
             }
         };
