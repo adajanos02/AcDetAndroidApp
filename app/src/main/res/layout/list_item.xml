@@ -23,7 +23,7 @@
             android:layout_marginTop="10dp"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded"/>
         <TextView
-            android:layout_width="120dp"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
             android:id="@+id/listName"
             android:text="Name"
@@ -33,16 +33,7 @@
             android:layout_marginStart="30dp"
             android:layout_toEndOf="@id/listImage"/>
 
-        <TextView
-            android:id="@+id/listTime"
-            android:layout_width="130dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_toEndOf="@+id/listName"
-            android:text="time"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

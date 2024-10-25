@@ -32,7 +32,7 @@ public class ListAdapter extends ArrayAdapter<AccidentInfo> {
 
         ImageView listImage = view.findViewById(R.id.listImage);
         TextView listTitle = view.findViewById(R.id.listName);
-        TextView listDate = view.findViewById(R.id.listTime);
+        //TextView listDate = view.findViewById(R.id.listTime);
 
 
         if (listData.image.equals("1")) {
@@ -43,7 +43,7 @@ public class ListAdapter extends ArrayAdapter<AccidentInfo> {
         }
         //listImage.setImageResource(listData.image);
         listTitle.setText(listData.title);
-        listDate.setText(listData.date);
+        //listDate.setText(listData.date);
 
         return view;
     }

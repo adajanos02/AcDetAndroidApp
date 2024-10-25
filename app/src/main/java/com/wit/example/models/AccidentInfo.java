@@ -6,6 +6,10 @@ public class AccidentInfo {
     public String address;
     public String image;
 
+    public AccidentInfo(){
+
+    }
+
     public AccidentInfo(String title, String date, String address, String image) {
         this.title = title;
         this.date = date;
