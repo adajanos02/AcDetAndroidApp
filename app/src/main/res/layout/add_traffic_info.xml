@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/login_background"
+    android:padding="16dp"
+    tools:context=".activities.AddTrafficInfoActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:padding="10dp"
+        />
+
+    <EditText
+        android:id="@+id/descriptionEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/intro_btn_background"
+        android:layout_marginBottom="20dp"
+        android:textSize="20sp"
+        android:inputType="text"
+        android:textColorHint="@color/white"
+        android:padding="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Address"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:padding="10dp"
+        />
+
+    <EditText
+        android:id="@+id/addressEdit"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/intro_btn_background"
+        android:textColorHint="@color/white"
+        android:inputType="text"
+        android:padding="10dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Info Type"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:layout_below="@id/addressEdit"
+        android:padding="10dp"
+        />
+
+    <Spinner
+        android:id="@+id/infoType"
+        android:layout_width="match_parent"
+        android:autofillHints="Blood Type"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:entries="@array/info_types"
+        android:background="@drawable/intro_btn_background"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"
+        android:padding="10dp" />
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/addButton"
+        android:layout_gravity="center"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Add "
+        android:textColor="@color/white"
+        android:padding="10dp"
+        style="@android:style/Widget.Button"
+        android:background="@drawable/intro_btn_background"
+        android:textSize="20sp"
+        android:layout_marginTop="40dp"/>
+
+</LinearLayout>

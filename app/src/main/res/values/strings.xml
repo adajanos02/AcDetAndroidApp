@@ -52,5 +52,10 @@
         <item>AB+</item>
         <item>AB-</item>
     </string-array>
+    <string-array name="info_types">
+        <item>Válassza ki az eseményt!</item>
+        <item>Közúti baleset történt</item>
+        <item>Úttesten észlelt akadály</item>
+    </string-array>
 
 </resources>

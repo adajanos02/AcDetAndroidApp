@@ -53,6 +53,7 @@
         <activity android:name=".helpers.MongoDbInitializer"/>
         <activity android:name=".activities.TrafficInfoActivity"/>
         <activity android:name=".activities.DetailedActivity"/>
+        <activity android:name=".activities.AddTrafficInfoActivity"/>
     </application>
 
 </manifest>

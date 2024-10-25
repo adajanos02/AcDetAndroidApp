@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -42,6 +44,13 @@ public class TrafficInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = TrafficInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Button addButton = findViewById(R.id.addButton);
+
+        addButton.setOnClickListener((v) -> {
+            Intent intent = new Intent(TrafficInfoActivity.this, AddTrafficInfoActivity.class);
+            startActivity(intent);
+        });
 
         getAccidentNews();
         Realm.init(getApplicationContext());
