@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@drawable/login_background">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_policeinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Police Accident Info"
+        style="@android:style/Widget.Button"
+        android:textColor="@color/white"
+        android:background="@drawable/intro_btn_background"
+        android:layout_margin="10dp"
+        android:textSize="30dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_userinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_policeinfo"
+        android:layout_marginBottom="16dp"
+        android:text="User Accident Info"
+        style="@android:style/Widget.Button"
+        android:textColor="@color/white"
+        android:background="@drawable/intro_btn_background"
+        android:layout_margin="10dp"
+        android:textSize="30dp" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
