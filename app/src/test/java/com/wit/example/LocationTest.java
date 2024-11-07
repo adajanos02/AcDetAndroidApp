@@ -26,24 +26,21 @@ public class LocationTest {
 
     @Test
     public void testLocationRetrieval() {
-        // Mock location data
-        Location mockLocation = mock(Location.class);
-        when(mockLocation.getLatitude()).thenReturn(47.4979); // Példa: Budapest
-        when(mockLocation.getLongitude()).thenReturn(19.0402);
 
-        // Mock Task returned by FusedLocationProviderClient
+        Location mockLocation = mock(Location.class);
+        when(mockLocation.getLatitude()).thenReturn(47.499);
+        when(mockLocation.getLongitude()).thenReturn(19.402);
+
         Task<Location> locationTask = mock(Task.class);
         when(locationTask.isSuccessful()).thenReturn(true);
         when(locationTask.getResult()).thenReturn(mockLocation);
 
-        // Mocking location request
         when(locationProviderClient.getLastLocation()).thenReturn(locationTask);
 
-        // Ellenőrizd a mockolt helyet
         Location retrievedLocation = locationTask.getResult();
         assert retrievedLocation != null;
-        assert retrievedLocation.getLatitude() == 47.4979;
-        assert retrievedLocation.getLongitude() == 19.0402;
+        assert retrievedLocation.getLatitude() == 47.499;
+        assert retrievedLocation.getLongitude() == 19.402;
     }
 }
 

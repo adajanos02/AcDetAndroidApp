@@ -24,10 +24,6 @@ public class Countdown implements Runnable{
         this.onCountdownFinishListener = listener;
     }
 
-
-    public Countdown(int seconds) {
-        this.seconds = seconds;
-    }
     @Override
     public void run() {
         while (seconds > 0) {
