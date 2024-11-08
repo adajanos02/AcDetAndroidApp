@@ -52,8 +52,8 @@ public class TrafficInfoActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        //getAccidentNews();
-        getNewsFromXml();
+        getAccidentNews();
+        //getNewsFromXml();
 
         Realm.init(getApplicationContext());
     }
