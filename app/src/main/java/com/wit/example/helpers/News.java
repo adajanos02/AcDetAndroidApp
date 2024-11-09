@@ -40,7 +40,7 @@ public class News {
                     } else if ("pubDate".equals(tagName)) {
                         accidentInfo.date = (parser.nextText());
                     } else if ("description".equals(tagName)) {
-                        accidentInfo.address = (parser.nextText());
+                        accidentInfo.address = parseDescription(parser.nextText());
                     }
                     accidentInfo.image = "1";
 
@@ -52,5 +52,24 @@ public class News {
         }
         return accidentList;
     }
+
+    public static String parseDescription(String description) {
+        description = description.replaceAll("&lt;.*?&gt;", "").trim();
+
+        String[] lines = description.split("\\r?\\n");
+        List<String> extractedTexts = new ArrayList<>();
+
+        for (String line : lines) {
+            line = line.trim();
+            if (!line.isEmpty()) {
+                extractedTexts.add(line);
+            }
+        }
+
+        return extractedTexts.get(1);
+    }
+
+
+
 
 }

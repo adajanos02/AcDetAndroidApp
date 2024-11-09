@@ -28,7 +28,6 @@ public class MenuActivity extends AppCompatActivity {
         Button startRideButton = findViewById(R.id.button_start_ride);
         Button contactsButton = findViewById(R.id.button_contacts);
         Button findMeButton = findViewById(R.id.button_find_me);
-        Button sosButton = findViewById(R.id.button_sos);
         Button trafficButton = findViewById(R.id.trafficInfo);
         Button logoutButton = findViewById(R.id.logout_btn);
 
@@ -72,19 +71,11 @@ public class MenuActivity extends AppCompatActivity {
         trafficButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, TrafficInfoActivity.class);
+                Intent intent = new Intent(MenuActivity.this, TrafficMenuActivity.class);
                 startActivity(intent);
             }
         });
 
-        sosButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, SosAlertActivity.class);
-                startActivity(intent);
-
-            }
-        });
     }
 
     private void checkForSmsPermission() {
