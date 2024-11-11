@@ -7,11 +7,17 @@ public class DistanceCalculator {
     static double rad = Math.PI / 180.0;
 
     public double greatCircleInKilometers(double lat1, double long1, double lat2, double long2) {
-        double n1 = lat1 * rad;
-        double n2 = lat2 * rad;
-        double n3 = long1 * rad;
-        double n4 = long2 * rad;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(long2 - long1);
+        double radLat1 = Math.toRadians(lat1);
+        double radLat2 = Math.toRadians(lat2);
 
-        return 6371.01 * acos(sin(n1) * sin(n2) + cos(n1) * cos(n2) * cos(n4 - n3));
+        // Haversine formula
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(radLat1) * Math.cos(radLat2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+
+        // Távolság kiszámítása
+        return 6371.0 * c;
     }
 }
