@@ -37,7 +37,6 @@ public class PersonalInfoActivity extends AppCompatActivity {
         allergiesEditText = findViewById(R.id.etAllergies);
 
 
-        // Vércsoport kiválasztásának ellenőrzése
         findViewById(R.id.btnSave).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,11 +45,8 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 if (selectedBloodType.equals("Válassza ki vércsoportját")) {
                     Toast.makeText(PersonalInfoActivity.this, "Kérjük, válassza ki a vércsoportját!", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Adatok mentése vagy további feldolgozása
                    updatePersonalData();
-
-                    // Például az adatok ellenőrzése és feldolgozása itt folytatható...
-                    Toast.makeText(PersonalInfoActivity.this, "Adatok mentve!", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(PersonalInfoActivity.this, "Adatok mentve!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -65,7 +61,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
             if (task.isSuccess()){
                 Document currentDoc = task.get().next();
                 fullNameEditText.setText(currentDoc.getString("fullname"));
-                tajEditText.setText(currentDoc.getString("tajszam"));
+                tajEditText.setText(currentDoc.getString("medCond"));
                 allergiesEditText.setText(currentDoc.getString("allergiak"));
                 bloodTypeSpinner.setSelection(currentDoc.getInteger("bloodType"));
             }
@@ -80,7 +76,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
         Document query = new Document().append("userId", LoginActivity.user.getId());
         Document update = new Document().append("$set",
                 new Document().append("fullname", fullNameEditText.getText().toString())
-                        .append("tajszam", tajEditText.getText().toString())
+                        .append("medCond", tajEditText.getText().toString())
                         .append("allergiak", allergiesEditText.getText().toString())
                         .append("bloodType", (int)bloodTypeSpinner.getSelectedItemId()));
 
