@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Description"
+        android:text="Leírás"
         android:textSize="20dp"
         android:textColor="@color/white"
         android:padding="10dp"
@@ -32,7 +32,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Address"
+        android:text="Cím/környék"
         android:textSize="20dp"
         android:textColor="@color/white"
         android:padding="10dp"
@@ -52,7 +52,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Info Type"
+        android:text="Információ típus"
         android:textSize="20dp"
         android:textColor="@color/white"
         android:layout_below="@id/addressEdit"
@@ -78,7 +78,7 @@
         android:layout_gravity="center"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Add "
+        android:text="Hozzáad"
         android:textColor="@color/white"
         android:padding="10dp"
         style="@android:style/Widget.Button"

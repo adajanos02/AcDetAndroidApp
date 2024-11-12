@@ -26,10 +26,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:background="@drawable/intro_btn_background"
-            android:hint="UserName"
+            android:hint="Email"
             android:inputType="text"
             android:padding="18dp"
-            android:text="adamecz36@gmail.com"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="20sp" />
@@ -40,35 +39,34 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/intro_btn_background"
-            android:hint="Password"
+            android:hint="Jelszó"
             android:inputType="textPassword"
             android:padding="18dp"
-            android:text="Patkany02"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="20sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_btn"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:background="@drawable/intro_btn_background"
             android:padding="18dp"
-            android:text="Login"
+            android:text="Bejelentkezés"
             style="@android:style/Widget.Button"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signup_btn"
-            android:layout_width="150dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             style="@android:style/Widget.Button"
             android:background="@drawable/intro_btn_background"
             android:padding="18dp"
-            android:text="Sign Up"
+            android:text="Regisztráció"
             android:textColor="@color/white"
             android:textSize="20sp" />
 

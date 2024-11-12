@@ -29,7 +29,7 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/intro_btn_background"
         android:textColorHint="@color/white"
-        android:hint="Password"
+        android:hint="Jelszó"
         android:inputType="textPassword"
         android:padding="10dp"/>
 
@@ -41,7 +41,7 @@
         android:layout_marginBottom="20dp"
         android:textColorHint="@color/white"
         android:background="@drawable/intro_btn_background"
-        android:hint="Phone Number"
+        android:hint="Telefonszám"
         android:inputType="phone"
         android:padding="10dp"/>
 
@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:textSize="20sp"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:hint="Név"
         android:textColorHint="@color/white"
         android:background="@drawable/intro_btn_background"
         app:layout_constraintTop_toBottomOf="@id/phoneEditText"
@@ -68,7 +68,7 @@
         android:inputType="number"
         android:background="@drawable/intro_btn_background"
         app:layout_constraintTop_toBottomOf="@id/tvTAJLabel"
-        android:hint="Health insrurance number"
+        android:hint="Egészségügyi állapot"
         android:textColorHint="@color/white"
         android:layout_marginBottom="20dp"
         android:textColor="@color/white"
@@ -79,7 +79,7 @@
         android:layout_width="match_parent"
         android:textSize="20sp"
         android:layout_height="wrap_content"
-        android:hint="Allergies"
+        android:hint="Allergiák"
         android:textColorHint="@color/white"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/tvAllergiesLabel"
@@ -88,7 +88,18 @@
         android:background="@drawable/intro_btn_background"
         android:layout_marginBottom="20dp"
         android:padding="10dp"/>
-
+    <TextView
+        android:id="@+id/tvBloodTypeLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vércsoport:"
+        app:layout_constraintTop_toBottomOf="@id/etTAJ"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
 
     <Spinner
         android:id="@+id/spinnerBloodType"
@@ -109,9 +120,10 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/registerButton"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="Regisztráció"
         android:textColor="@color/white"
         android:padding="10dp"
         style="@android:style/Widget.Button"

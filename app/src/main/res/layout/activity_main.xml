@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:text="@string/search_devices" />
+                    android:text="Készülék keresés" />
         </LinearLayout>
 
         <LinearLayout
@@ -47,7 +47,7 @@
                 android:layout_height="70dp"
                 android:layout_weight="1"
                 android:textColor="@color/white"
-                android:text="@string/start_search" />
+                android:text="Indítás" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/stopSearchButton"
@@ -59,7 +59,7 @@
                 android:layout_height="70dp"
                 android:layout_weight="1"
                 android:textColor="@color/white"
-                android:text="@string/stop_search" />
+                android:text="Leállítás" />
         </LinearLayout>
 
         <LinearLayout
@@ -73,7 +73,7 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:layout_weight="1"
-                android:text="@string/devices_data" />
+                android:text="Készülék adatok" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

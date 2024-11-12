@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Police Traffic News"
+        android:text="Rendőrségi hírek"
         android:gravity="center"
         android:textColor="@color/white"
         android:layout_marginTop="5dp"
@@ -19,27 +19,10 @@
         android:padding="4dp"
         android:id="@+id/app_title"/>
 
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/addButton"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_height="wrap_content"
-        android:text="Add "
-        android:layout_below="@id/app_title"
-        android:textColor="@color/white"
-        android:padding="10dp"
-        style="@android:style/Widget.Button"
-        android:background="@drawable/intro_btn_background"
-        android:textSize="20sp"
-        android:layout_marginTop="10dp"/>
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/addButton"
+        android:layout_below="@id/app_title"
         android:id="@+id/news_list"
         android:scrollbars="vertical"
         android:layout_marginTop="12dp"

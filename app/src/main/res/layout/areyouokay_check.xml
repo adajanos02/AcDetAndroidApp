@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:text="Are you okay?"
+        android:text="Jól vagy?"
         android:textColor="@color/white"
         android:textSize="50sp"
         android:textStyle="bold" />
@@ -42,7 +42,7 @@
         android:width="300dp"
         android:height="150dp"
         android:background="@drawable/intro_btn_background"
-        android:text="Yes"
+        android:text="Igen"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="80dp" />

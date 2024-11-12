@@ -113,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
                 .append("longitude", "")
                 .append("allergiak", userInfo.allergiak)
                 .append("fullname", userInfo.fullname)
-                .append("tajszam", userInfo.tajszam)
+                .append("medCond", userInfo.tajszam)
                 .append("bloodType", userInfo.bloodtype)
                 .append("userId", LoginActivity.user.getId());
         mongoCollection.insertOne(document).getAsync(result -> {
