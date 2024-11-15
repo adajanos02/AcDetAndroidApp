@@ -27,6 +27,7 @@ public class SmsHelper {
         ArrayList<String> parts = smsManager.divideMessage(message);
         smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
         Log.v("SMS", "SMS sent!" + phoneNumber);
+
     }
 
     public void smsTextBuilder(MongoCollection<Document> mongoCollection) {

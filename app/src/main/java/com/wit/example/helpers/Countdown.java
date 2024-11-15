@@ -23,11 +23,18 @@ public class Countdown implements Runnable{
         this.seconds = seconds;
         this.onCountdownFinishListener = listener;
     }
+    private static final boolean ENABLE_LOGGING = false;
+
+    public static void log(String tag, String message) {
+        if (ENABLE_LOGGING) {
+            Log.v(tag, message);
+        }
+    }
 
     @Override
     public void run() {
         while (seconds > 0) {
-            Log.v("COUNTDOWN", "seconds remaining: " + seconds);
+            log("COUNTDOWN", "seconds remaining: " + seconds);
             seconds--;
             try {
                 Thread.sleep(1000); // 1 másodperc várakozás
@@ -35,6 +42,7 @@ public class Countdown implements Runnable{
                 return;
             }
         }
+
         if (onCountdownFinishListener != null) {
             onCountdownFinishListener.onCountdownFinish();
         }
