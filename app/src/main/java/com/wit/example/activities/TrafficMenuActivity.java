@@ -19,6 +19,7 @@ public class TrafficMenuActivity extends AppCompatActivity {
 
         Button policeBtn = findViewById(R.id.button_policeinfo);
         Button userBtn = findViewById(R.id.button_userinfo);
+        Button weatherBtn = findViewById(R.id.button_weather);
 
         policeBtn.setOnClickListener((v) -> {
             Intent intent = new Intent(TrafficMenuActivity.this, PoliceTrafficInfoActivity.class);
@@ -27,6 +28,11 @@ public class TrafficMenuActivity extends AppCompatActivity {
 
         userBtn.setOnClickListener((v) -> {
             Intent intent = new Intent(TrafficMenuActivity.this, TrafficInfoActivity.class);
+            startActivity(intent);
+        });
+
+        weatherBtn.setOnClickListener((v) -> {
+            Intent intent = new Intent(TrafficMenuActivity.this, WeatherApiActivity.class);
             startActivity(intent);
         });
 

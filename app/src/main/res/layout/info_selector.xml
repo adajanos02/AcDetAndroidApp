@@ -33,6 +33,19 @@
         android:layout_margin="10dp"
         android:textSize="30dp" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_weather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_userinfo"
+            android:layout_marginBottom="16dp"
+            android:text="Időjárás"
+            style="@android:style/Widget.Button"
+            android:textColor="@color/white"
+            android:background="@drawable/intro_btn_background"
+            android:layout_margin="10dp"
+            android:textSize="30dp" />
+
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

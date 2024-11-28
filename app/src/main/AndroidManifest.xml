@@ -57,6 +57,7 @@
         <activity android:name=".activities.AddTrafficInfoActivity"/>
         <activity android:name=".activities.TrafficMenuActivity"/>
         <activity android:name=".activities.PoliceTrafficInfoActivity"/>
+        <activity android:name=".activities.WeatherApiActivity"/>
     </application>
 
 </manifest>
