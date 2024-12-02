@@ -9,7 +9,9 @@ import org.xmlpull.v1.XmlPullParser;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class News {
@@ -25,6 +27,8 @@ public class News {
         ArrayList<AccidentInfo> accidentList = new ArrayList<>();
         AccidentInfo accidentInfo = null;
         XmlPullParser parser = Xml.newPullParser();
+        SimpleDateFormat inputFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", java.util.Locale.ENGLISH);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
         parser.setInput(inputStream, "UTF-8");
 
         int eventType = parser.getEventType();
@@ -38,7 +42,8 @@ public class News {
                     if ("title".equals(tagName)) {
                         accidentInfo.title = (parser.nextText());
                     } else if ("pubDate".equals(tagName)) {
-                        accidentInfo.date = (parser.nextText());
+                        Date date = inputFormat.parse(parseDescription(parser.nextText()));
+                        accidentInfo.date = outputFormat.format(date);
                     } else if ("description".equals(tagName)) {
                         accidentInfo.address = parseDescription(parser.nextText());
                     }
