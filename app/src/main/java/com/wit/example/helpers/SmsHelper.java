@@ -42,7 +42,7 @@ public class SmsHelper {
                 builder.append("\nTeljes név: ").append(currentDoc.getString("fullname")).append("\n");
                 builder.append("Egészségügyi állapot: ").append(currentDoc.getString("medCond")).append("\n");
                 builder.append("Allergiák: ").append(currentDoc.getString("allergiak")).append("\n");
-                builder.append("Vércsoport: ").append(BloodTypeEnum.getText(currentDoc.getInteger("bloodType")));
+                builder.append("Vércsoport: ").append(BloodTypeEnum.getText(currentDoc.getInteger("bloodType"))).append("\n");
                 persDetails = builder.toString();
             }
         });

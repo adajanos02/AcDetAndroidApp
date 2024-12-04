@@ -42,12 +42,12 @@ public class News {
                     if ("title".equals(tagName)) {
                         accidentInfo.title = (parser.nextText());
                     } else if ("pubDate".equals(tagName)) {
-                        Date date = inputFormat.parse(parseDescription(parser.nextText()));
+                        Date date = inputFormat.parse(parser.nextText());
                         accidentInfo.date = outputFormat.format(date);
                     } else if ("description".equals(tagName)) {
                         accidentInfo.address = parseDescription(parser.nextText());
                     }
-                    accidentInfo.image = "1";
+                    accidentInfo.image = "2";
 
                 }
             } else if (eventType == XmlPullParser.END_TAG && "item".equals(tagName)) {
