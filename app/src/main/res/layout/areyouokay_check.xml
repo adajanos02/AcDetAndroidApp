@@ -16,7 +16,6 @@
         android:textSize="50sp"
         android:textStyle="bold" />
 
-    <!-- Szöveg: Are you okay? -->
     <ImageView
         android:layout_width="277dp"
         android:layout_height="241dp"
@@ -32,7 +31,6 @@
         android:textSize="50sp"
         android:textStyle="bold" />
 
-    <!-- YES gomb -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/okaybtn"
         style="@android:style/Widget.Button"

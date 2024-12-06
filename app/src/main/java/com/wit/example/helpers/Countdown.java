@@ -37,7 +37,7 @@ public class Countdown implements Runnable{
             log("COUNTDOWN", "seconds remaining: " + seconds);
             seconds--;
             try {
-                Thread.sleep(1000); // 1 másodperc várakozás
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 return;
             }

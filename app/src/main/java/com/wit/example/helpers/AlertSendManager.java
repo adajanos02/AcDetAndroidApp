@@ -125,7 +125,7 @@ public class AlertSendManager extends AppCompatActivity {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses != null && !addresses.isEmpty()) {
                 Address address = addresses.get(0);
-                return address.getAddressLine(0); // Teljes cím
+                return address.getAddressLine(0);
             }
         } catch (IOException e) {
             e.printStackTrace();

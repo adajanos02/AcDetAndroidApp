@@ -10,7 +10,6 @@ public class Contact extends RealmObject {
     private String name;
     private String phoneNumber;
 
-    // Getterek és setterek
     public String getId() {
         return id;
     }

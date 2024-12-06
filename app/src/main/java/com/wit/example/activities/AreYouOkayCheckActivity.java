@@ -15,8 +15,6 @@ import com.wit.example.helpers.Countdown;
 public class AreYouOkayCheckActivity extends AppCompatActivity {
 
     StartRideActivity sra = new StartRideActivity();
-    Countdown timer = new Countdown(10, sra);
-    Thread thread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -25,12 +23,7 @@ public class AreYouOkayCheckActivity extends AppCompatActivity {
 
         Button cancelBtn = findViewById(R.id.okaybtn);
 
-
-        // 10 másodperces számláló
-        //thread = new Thread(timer);
         sra.accidentHappend = true;
-        //thread.start();
-
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,7 +1,6 @@
 package com.wit.example.models;
 
 
-import java.security.PKCS12Attribute;
 
 public class PersonalUserInfo {
     public PersonalUserInfo(String fullname, String tajszam, String phoneNumber, Integer bloodtype, String allergiak, String email, String password) {

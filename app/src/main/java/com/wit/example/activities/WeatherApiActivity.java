@@ -19,8 +19,6 @@ import com.wit.example.R;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -31,7 +29,6 @@ public class  WeatherApiActivity extends AppCompatActivity {
             precipitationTextView,
             windSpeedTextView,
             humidityTextView,
-            precipitationProbabilityTextView,
             temperatureApparentTextView,
             visibilityTextView,
             windGustTextView  ;
@@ -48,14 +45,13 @@ public class  WeatherApiActivity extends AppCompatActivity {
         precipitationTextView = findViewById(R.id.precipitationTextView);
         windSpeedTextView = findViewById(R.id.windSpeedTextView);
         humidityTextView = findViewById(R.id.humidityTextView);
-        precipitationProbabilityTextView = findViewById(R.id.precipitationProbabilityTextView);
         temperatureApparentTextView = findViewById(R.id.temperatureApparentTextView);
         visibilityTextView = findViewById(R.id.visibilityTextView);
         windGustTextView = findViewById(R.id.windGustTextView);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        //fetchWeatherData(47.530980, 19.067078);
+
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -63,7 +59,6 @@ public class  WeatherApiActivity extends AppCompatActivity {
             return;
         }
 
-        // Új hely koordináták lekérése
         fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
                 .addOnSuccessListener(location -> {
                     if (location.getLatitude() != 0) {
@@ -73,7 +68,7 @@ public class  WeatherApiActivity extends AppCompatActivity {
                         fetchWeatherData(latitude, longitude);
 
                     } else {
-                        Log.e("LocationError", "Nem sikerült lekérni az új helyet.");
+                        Log.e("LocationError", "Nem sikerült a helyzet lekérés.");
                     }
                 })
                 .addOnFailureListener(e -> Log.e("LocationError", "Helylekérés sikertelen: " + e.getMessage()));

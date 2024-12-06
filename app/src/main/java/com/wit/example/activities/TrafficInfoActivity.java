@@ -53,8 +53,6 @@ public class TrafficInfoActivity extends AppCompatActivity {
         });
 
         getAccidentNews();
-        //getNewsFromXml();
-
         Realm.init(getApplicationContext());
     }
 

@@ -33,9 +33,6 @@ public class ContactsActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private ListView list;
 
-    ArrayList<String> strings = new ArrayList<>();
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -59,8 +56,6 @@ public class ContactsActivity extends AppCompatActivity {
         insertData = findViewById(R.id.phone_number);
         insertBtn = (Button) findViewById(R.id.upload_btn);
         Realm.init(getApplicationContext());
-
-
 
 
         insertBtn.setOnClickListener(new View.OnClickListener() {

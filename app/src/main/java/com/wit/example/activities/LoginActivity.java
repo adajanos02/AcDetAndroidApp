@@ -21,19 +21,13 @@ import io.realm.mongodb.mongo.MongoDatabase;
 
 
 public class LoginActivity extends AppCompatActivity{
-
-    private EditText email;
-    private EditText password;
     static String AppId = "android_project-ibyjncm";
 
     public static User user;
-    public static PersonalUserInfo userInfo;
     public static MongoDatabase mongoDatabase;
     public static MongoClient mongoClient;
 
     public static App app;
-
-
 
 
     @Override
@@ -45,7 +39,6 @@ public class LoginActivity extends AppCompatActivity{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
 
         Realm.init(this);
 

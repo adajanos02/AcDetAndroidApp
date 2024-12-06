@@ -23,8 +23,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp" />
 
-    <!-- Teljes név mező -->
-
     <TextView
         android:id="@+id/tvFullNameLabel"
         android:layout_width="match_parent"
@@ -49,7 +47,6 @@
         android:layout_marginRight="10dp"
         android:padding="10dp" />
 
-    <!-- TAJ-szám mező -->
     <TextView
         android:id="@+id/tvTAJLabel"
         android:layout_width="match_parent"
@@ -80,7 +77,6 @@
         android:layout_marginRight="10dp"
         android:padding="10dp"/>
 
-    <!-- Vércsoport kiválasztása legördülő menü -->
     <TextView
         android:id="@+id/tvBloodTypeLabel"
         android:layout_width="match_parent"
@@ -111,7 +107,6 @@
         android:layout_marginRight="10dp"
         android:padding="10dp" />
 
-    <!-- Allergiák mező -->
     <TextView
         android:id="@+id/tvAllergiesLabel"
         android:layout_width="0dp"

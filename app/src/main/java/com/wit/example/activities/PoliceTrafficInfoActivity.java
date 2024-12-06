@@ -18,16 +18,9 @@ import com.wit.example.helpers.ListAdapter;
 import com.wit.example.helpers.MongoDbInitializer;
 import com.wit.example.helpers.News;
 import com.wit.example.models.AccidentInfo;
-
-import org.bson.Document;
-
 import java.io.InputStream;
 import java.util.ArrayList;
-
 import io.realm.Realm;
-import io.realm.mongodb.RealmResultTask;
-import io.realm.mongodb.mongo.MongoCollection;
-import io.realm.mongodb.mongo.iterable.MongoCursor;
 
 public class PoliceTrafficInfoActivity extends AppCompatActivity {
     private ArrayList<AccidentInfo> newsList = new ArrayList<>();

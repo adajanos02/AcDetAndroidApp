@@ -81,21 +81,17 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
         startLocationUpdates();
 
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
         WitBluetoothManager.initInstance(this);
         if (!bwt901bleList.isEmpty()) {
             refreshDataTh();
         }
 
-        // 开始搜索按钮
         Button startSearchButton = findViewById(R.id.startSearchButton);
         startSearchButton.setOnClickListener((v) -> {
             startDiscovery();
 
         });
 
-        // 停止搜索按钮
         Button stopSearchButton = findViewById(R.id.stopSearchButton);
         stopSearchButton.setOnClickListener((v) -> {
             stopDiscovery();
@@ -289,48 +285,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         return builder.toString();
     }
 
-    private void handleAppliedCalibration() {
-        for (int i = 0; i < bwt901bleList.size(); i++) {
-            Bwt901ble bwt901ble = bwt901bleList.get(i);
-            bwt901ble.unlockReg();
-            bwt901ble.appliedCalibration();
-        }
-        Toast.makeText(this, "OK", Toast.LENGTH_LONG).show();
-    }
-
-    private void handleStartFieldCalibration() {
-        for (int i = 0; i < bwt901bleList.size(); i++) {
-            Bwt901ble bwt901ble = bwt901bleList.get(i);
-            bwt901ble.unlockReg();
-            bwt901ble.startFieldCalibration();
-        }
-        Toast.makeText(this, "OK", Toast.LENGTH_LONG).show();
-    }
-
-    private void handleEndFieldCalibration() {
-        for (int i = 0; i < bwt901bleList.size(); i++) {
-            Bwt901ble bwt901ble = bwt901bleList.get(i);
-            bwt901ble.unlockReg();
-            bwt901ble.endFieldCalibration();
-        }
-        Toast.makeText(this, "OK", Toast.LENGTH_LONG).show();
-    }
-
-    private void handleReadReg03() {
-        for (int i = 0; i < bwt901bleList.size(); i++) {
-            Bwt901ble bwt901ble = bwt901bleList.get(i);
-            int waitTime = 200;
-            bwt901ble.sendProtocolData(new byte[]{(byte) 0xff, (byte) 0xAA, (byte) 0x27, (byte) 0x03, (byte) 0x00}, waitTime);
-            String reg03Value = bwt901ble.getDeviceData("03");
-            Toast.makeText(this, bwt901ble.getDeviceName() + " reg03Value: " + reg03Value, Toast.LENGTH_LONG).show();
-        }
-    }
-
-
-
     private boolean timerActive = false;
-
-    private LocationManager locationManager;
     private double accelerationThreshold = -6.6;
     Countdown timer = new Countdown(10, this);
     private boolean firstAngelData = true;

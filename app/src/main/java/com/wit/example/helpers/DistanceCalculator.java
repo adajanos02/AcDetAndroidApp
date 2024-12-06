@@ -4,7 +4,6 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class DistanceCalculator {
-    static double rad = Math.PI / 180.0;
 
     public double greatCircleInKilometers(double lat1, double long1, double lat2, double long2) {
         double la = Math.toRadians(lat2 - lat1);

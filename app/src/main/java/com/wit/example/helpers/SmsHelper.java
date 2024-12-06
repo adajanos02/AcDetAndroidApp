@@ -23,7 +23,6 @@ public class SmsHelper {
 
     public static void sendSms(String phoneNumber, String message) {
         SmsManager smsManager = SmsManager.getDefault();
-        //message = message + persDetails;
         ArrayList<String> parts = smsManager.divideMessage(message);
         smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
         Log.v("SMS", "SMS sent!" + phoneNumber);

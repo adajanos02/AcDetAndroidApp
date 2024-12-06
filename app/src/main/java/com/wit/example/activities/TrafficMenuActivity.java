@@ -7,7 +7,6 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.wit.example.R;
-import com.wit.example.databinding.TrafficInfoBinding;
 
 import io.realm.Realm;
 
