@@ -104,7 +104,7 @@ public class AlertSendManager extends AppCompatActivity {
         String currentTime = sdf.format(new Date(currentTimeMillis));
         Document document = new Document()
                 .append("title", "Baleset")
-                .append("address", getAddressFromCoordinates(latitude, longitude))
+                .append("address", getAddressFromCoordinates(latitude, longitude) + "\n" + SmsHelper.gpsLinkGenerator(latitude, longitude))
                 .append("image", "1")
                 .append("date", currentTime);
 
