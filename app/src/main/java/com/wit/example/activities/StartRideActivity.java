@@ -99,7 +99,6 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
             destroyed = true;
         });
 
-        // 自动刷新数据线程
         Thread thread = new Thread(this::refreshDataTh);
         destroyed = false;
         thread.start();
@@ -114,7 +113,6 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     public void startDiscovery() {
 
-        // 关闭所有设备
         for (int i = 0; i < bwt901bleList.size(); i++) {
             Bwt901ble bwt901ble = bwt901bleList.get(i);
             bwt901ble.removeRecordObserver(this);
@@ -271,6 +269,7 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
             if (data < min) {
                 min = data;
             }
+            Log.v("Acceleration", String.valueOf(data));
 
             builder.append(getString(R.string.accY)).append(":").append(data).append(" m/s2 \n\n");
 
@@ -303,7 +302,6 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
             }
         });
         timerActive = true;
-        // 10 másodperces számláló
         thread = new Thread(countdown);
         thread.start();
 
@@ -317,7 +315,6 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
             public void onLocationResult(@NonNull LocationResult locationResult) {
 
                 for (Location location : locationResult.getLocations()) {
-                    // Hely koordináták lekérése
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
                     sendManager.userAlert(latitude, longitude);
@@ -345,7 +342,6 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
             public void onLocationResult(@NonNull LocationResult locationResult) {
 
                 for (Location location : locationResult.getLocations()) {
-                    // Hely koordináták lekérése
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
                     if (latitude != 0 && longitude != 0) {
