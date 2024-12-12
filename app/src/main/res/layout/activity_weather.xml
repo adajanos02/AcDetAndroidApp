@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Csapadék esélye: "
+        android:text="Csapadék valószínűsége: "
         android:textSize="18sp"
         android:padding="8dp" />
 
@@ -42,29 +42,11 @@
         android:padding="8dp" />
 
     <TextView
-        android:id="@+id/precipitationProbabilityTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="Csapadék valószínűsége: "
-        android:textSize="18sp"
-        android:padding="8dp" />
-
-    <TextView
         android:id="@+id/temperatureApparentTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="Hőérzet: "
-        android:textSize="18sp"
-        android:padding="8dp" />
-
-    <TextView
-        android:id="@+id/visibilityTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="Látótávolság: "
         android:textSize="18sp"
         android:padding="8dp" />
 

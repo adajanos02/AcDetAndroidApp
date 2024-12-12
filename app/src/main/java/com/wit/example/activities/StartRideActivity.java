@@ -238,8 +238,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
         StringBuilder builder = new StringBuilder();
         if (bwt901ble.getDeviceData(WitSensorKey.AngleX) != null) {
             if (firstAngelData) {
-                angleThreshold1 = Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) + 70;
-                angleThreshold2 = Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) - 70;
+                angleThreshold1 = Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) + 75;
+                angleThreshold2 = Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", ".")) - 75;
                 firstAngelData = false;
             }
             if (inFallAngelInterval(angleThreshold1, angleThreshold2, Double.parseDouble(bwt901ble.getDeviceData(WitSensorKey.AngleX).replaceAll(",", "."))) && !timerActive) {
@@ -333,8 +333,8 @@ public class StartRideActivity extends AppCompatActivity implements IBluetoothFo
 
     public void startLocationUpdates() {
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(20000); // 20 másodperc
-        locationRequest.setFastestInterval(20000); // 20 másodperc
+        locationRequest.setInterval(30000);
+        locationRequest.setFastestInterval(30000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         locationCallback = new LocationCallback() {

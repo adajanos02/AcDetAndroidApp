@@ -30,7 +30,6 @@ public class  WeatherApiActivity extends AppCompatActivity {
             windSpeedTextView,
             humidityTextView,
             temperatureApparentTextView,
-            visibilityTextView,
             windGustTextView  ;
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -46,7 +45,6 @@ public class  WeatherApiActivity extends AppCompatActivity {
         windSpeedTextView = findViewById(R.id.windSpeedTextView);
         humidityTextView = findViewById(R.id.humidityTextView);
         temperatureApparentTextView = findViewById(R.id.temperatureApparentTextView);
-        visibilityTextView = findViewById(R.id.visibilityTextView);
         windGustTextView = findViewById(R.id.windGustTextView);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -107,7 +105,6 @@ public class  WeatherApiActivity extends AppCompatActivity {
                     double precipitationProbability = values.getDouble("precipitationProbability");
                     double humidity = values.getDouble("humidity");
                     double temperatureApparent = values.getDouble("temperatureApparent");
-                    double visibility = values.getDouble("visibility");
                     double windGust = values.getDouble("windGust");
                     double windSpeed = values.getDouble("windSpeed");
 
@@ -117,7 +114,6 @@ public class  WeatherApiActivity extends AppCompatActivity {
                         windSpeedTextView.setText("Szélsebesség: " + windSpeed + " m/s");
                         humidityTextView.setText("Páratartalom: " + humidity + " %");
                         temperatureApparentTextView.setText("Hőérzet: " + temperatureApparent + " °C");
-                        visibilityTextView.setText("Látótávolság: " + visibility + " m");
                         windGustTextView.setText("Széllökés: " + windGust + " m/s");
 
                     });
